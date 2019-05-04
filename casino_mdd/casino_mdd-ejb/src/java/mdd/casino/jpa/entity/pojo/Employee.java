@@ -40,7 +40,6 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Employee.findByIdEmployee", query = "SELECT e FROM Employee e WHERE e.idEmployee = :idEmployee")
     , @NamedQuery(name = "Employee.findByPosition", query = "SELECT e FROM Employee e WHERE e.position = :position")
     , @NamedQuery(name = "Employee.findByAdmitionDate", query = "SELECT e FROM Employee e WHERE e.admitionDate = :admitionDate")
-    , @NamedQuery(name = "Employee.findByStatus", query = "SELECT e FROM Employee e WHERE e.status = :status")
     , @NamedQuery(name = "Employee.findByUpdatedAt", query = "SELECT e FROM Employee e WHERE e.updatedAt = :updatedAt")
     , @NamedQuery(name = "Employee.findByCreatedAt", query = "SELECT e FROM Employee e WHERE e.createdAt = :createdAt")})
 public class Employee implements Serializable {
@@ -63,11 +62,6 @@ public class Employee implements Serializable {
     private Date admitionDate;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "status")
-    private String status;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
@@ -77,10 +71,11 @@ public class Employee implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmployee")
+    private Collection<Sale> saleCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmployee")
+    private Collection<Exchange> exchangeCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmployee")
     private Collection<UserAccount> userAccountCollection;
-    @JoinColumn(name = "id_employee_status", referencedColumnName = "id_employee_status")
-    @ManyToOne(optional = false)
-    private EmployeeStatus idEmployeeStatus;
     @JoinColumn(name = "id_office", referencedColumnName = "id_office")
     @ManyToOne(optional = false)
     private Office idOffice;
@@ -95,11 +90,10 @@ public class Employee implements Serializable {
         this.idEmployee = idEmployee;
     }
 
-    public Employee(Integer idEmployee, String position, Date admitionDate, String status, Date updatedAt, Date createdAt) {
+    public Employee(Integer idEmployee, String position, Date admitionDate, Date updatedAt, Date createdAt) {
         this.idEmployee = idEmployee;
         this.position = position;
         this.admitionDate = admitionDate;
-        this.status = status;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
     }
@@ -128,14 +122,6 @@ public class Employee implements Serializable {
         this.admitionDate = admitionDate;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -153,20 +139,30 @@ public class Employee implements Serializable {
     }
 
     @XmlTransient
+    public Collection<Sale> getSaleCollection() {
+        return saleCollection;
+    }
+
+    public void setSaleCollection(Collection<Sale> saleCollection) {
+        this.saleCollection = saleCollection;
+    }
+
+    @XmlTransient
+    public Collection<Exchange> getExchangeCollection() {
+        return exchangeCollection;
+    }
+
+    public void setExchangeCollection(Collection<Exchange> exchangeCollection) {
+        this.exchangeCollection = exchangeCollection;
+    }
+
+    @XmlTransient
     public Collection<UserAccount> getUserAccountCollection() {
         return userAccountCollection;
     }
 
     public void setUserAccountCollection(Collection<UserAccount> userAccountCollection) {
         this.userAccountCollection = userAccountCollection;
-    }
-
-    public EmployeeStatus getIdEmployeeStatus() {
-        return idEmployeeStatus;
-    }
-
-    public void setIdEmployeeStatus(EmployeeStatus idEmployeeStatus) {
-        this.idEmployeeStatus = idEmployeeStatus;
     }
 
     public Office getIdOffice() {

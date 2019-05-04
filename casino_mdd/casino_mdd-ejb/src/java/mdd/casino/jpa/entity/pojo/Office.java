@@ -75,9 +75,9 @@ public class Office implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOffice")
-    private Collection<ClientHasOffice> clientHasOfficeCollection;
+    private Collection<Reward> rewardCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOffice")
-    private Collection<Machine> machineCollection;
+    private Collection<Sale> saleCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOffice")
     private Collection<Employee> employeeCollection;
 
@@ -146,21 +146,21 @@ public class Office implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ClientHasOffice> getClientHasOfficeCollection() {
-        return clientHasOfficeCollection;
+    public Collection<Reward> getRewardCollection() {
+        return rewardCollection;
     }
 
-    public void setClientHasOfficeCollection(Collection<ClientHasOffice> clientHasOfficeCollection) {
-        this.clientHasOfficeCollection = clientHasOfficeCollection;
+    public void setRewardCollection(Collection<Reward> rewardCollection) {
+        this.rewardCollection = rewardCollection;
     }
 
     @XmlTransient
-    public Collection<Machine> getMachineCollection() {
-        return machineCollection;
+    public Collection<Sale> getSaleCollection() {
+        return saleCollection;
     }
 
-    public void setMachineCollection(Collection<Machine> machineCollection) {
-        this.machineCollection = machineCollection;
+    public void setSaleCollection(Collection<Sale> saleCollection) {
+        this.saleCollection = saleCollection;
     }
 
     @XmlTransient

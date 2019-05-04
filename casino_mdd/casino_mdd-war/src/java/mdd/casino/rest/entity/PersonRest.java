@@ -7,13 +7,18 @@ package mdd.casino.rest.entity;
 
 import java.util.Date;
 import java.util.List;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import mdd.casino.jpa.entity.facade.PersonFacade;
 import mdd.casino.jpa.entity.pojo.Person;
 import mdd.casino.util.BeanUtil;
@@ -45,10 +50,12 @@ public class PersonRest {
         return "hello "+p.getName();
     }
     
-    @GET
-    @Path("create/{obj_json}")
+    @POST
+    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
-    public String create(@PathParam("obj_json") String obj_json) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response create( String obj_json) { 
+                
         Person p = JsonUtil.jsonToObject(obj_json, Person.class);
         p.setCreatedAt(new Date());
         p.setUpdatedAt(new Date());
@@ -58,7 +65,8 @@ public class PersonRest {
         catch(Exception e){
             e.printStackTrace();
         }
-        return JsonUtil.objectToJson(p);
+        String result = JsonUtil.objectToJson(p);
+        return Response.status(200).entity(result).build();
     }
     
     @GET
@@ -92,5 +100,18 @@ public class PersonRest {
             e.printStackTrace();
         }
         return JsonUtil.objectToJson(p);
+    }
+    @PUT
+    @Path("/prueba2/{param}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response putMsg(@PathParam("param") String msg,  String obj_json) {
+        String output = "PUT: Jersey say : " + msg + obj_json;
+        return Response.status(200).entity(output).build();
+    }
+    @DELETE
+    @Path("/delete/{param}")
+    public Response deleteMsg(@PathParam("param") String msg) {
+        String output = "DELETE:Jersey say : " + msg;
+        return Response.status(200).entity(output).build();
     }
 }

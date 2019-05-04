@@ -58,13 +58,12 @@ public class Client implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
-    private Collection<ClientHasOffice> clientHasOfficeCollection;
-    @JoinColumn(name = "id_client_category", referencedColumnName = "id_client_category")
-    @ManyToOne(optional = false)
-    private ClientCategory idClientCategory;
+    private Collection<Sale> saleCollection;
     @JoinColumn(name = "id_person", referencedColumnName = "id_person")
     @ManyToOne(optional = false)
     private Person idPerson;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
+    private Collection<Exchange> exchangeCollection;
 
     public Client() {
     }
@@ -104,20 +103,12 @@ public class Client implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ClientHasOffice> getClientHasOfficeCollection() {
-        return clientHasOfficeCollection;
+    public Collection<Sale> getSaleCollection() {
+        return saleCollection;
     }
 
-    public void setClientHasOfficeCollection(Collection<ClientHasOffice> clientHasOfficeCollection) {
-        this.clientHasOfficeCollection = clientHasOfficeCollection;
-    }
-
-    public ClientCategory getIdClientCategory() {
-        return idClientCategory;
-    }
-
-    public void setIdClientCategory(ClientCategory idClientCategory) {
-        this.idClientCategory = idClientCategory;
+    public void setSaleCollection(Collection<Sale> saleCollection) {
+        this.saleCollection = saleCollection;
     }
 
     public Person getIdPerson() {
@@ -126,6 +117,15 @@ public class Client implements Serializable {
 
     public void setIdPerson(Person idPerson) {
         this.idPerson = idPerson;
+    }
+
+    @XmlTransient
+    public Collection<Exchange> getExchangeCollection() {
+        return exchangeCollection;
+    }
+
+    public void setExchangeCollection(Collection<Exchange> exchangeCollection) {
+        this.exchangeCollection = exchangeCollection;
     }
 
     @Override

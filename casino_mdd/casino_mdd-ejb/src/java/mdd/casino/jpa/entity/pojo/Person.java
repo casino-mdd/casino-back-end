@@ -6,10 +6,8 @@
 package mdd.casino.jpa.entity.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,14 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -42,6 +38,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Person.findBySurname", query = "SELECT p FROM Person p WHERE p.surname = :surname")
     , @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email")
     , @NamedQuery(name = "Person.findByPhone", query = "SELECT p FROM Person p WHERE p.phone = :phone")
+    , @NamedQuery(name = "Person.findByIdentificationNumber", query = "SELECT p FROM Person p WHERE p.identificationNumber = :identificationNumber")
     , @NamedQuery(name = "Person.findByCreatedAt", query = "SELECT p FROM Person p WHERE p.createdAt = :createdAt")
     , @NamedQuery(name = "Person.findByUpdatedAt", query = "SELECT p FROM Person p WHERE p.updatedAt = :updatedAt")})
 public class Person implements Serializable {
@@ -83,6 +80,11 @@ public class Person implements Serializable {
     private long phone;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 2147483647)
+    @Column(name = "identification_number")
+    private String identificationNumber;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
@@ -91,10 +93,6 @@ public class Person implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPerson")
-    private Collection<Client> clientCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPerson")
-    private Collection<Employee> employeeCollection;
 
     public Person() {
     }
@@ -103,7 +101,7 @@ public class Person implements Serializable {
         this.idPerson = idPerson;
     }
 
-    public Person(Integer idPerson, int age, String gender, String name, String surname, String email, long phone, Date createdAt, Date updatedAt) {
+    public Person(Integer idPerson, int age, String gender, String name, String surname, String email, long phone, String identificationNumber, Date createdAt, Date updatedAt) {
         this.idPerson = idPerson;
         this.age = age;
         this.gender = gender;
@@ -111,6 +109,7 @@ public class Person implements Serializable {
         this.surname = surname;
         this.email = email;
         this.phone = phone;
+        this.identificationNumber = identificationNumber;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -171,6 +170,14 @@ public class Person implements Serializable {
         this.phone = phone;
     }
 
+    public String getIdentificationNumber() {
+        return identificationNumber;
+    }
+
+    public void setIdentificationNumber(String identificationNumber) {
+        this.identificationNumber = identificationNumber;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }
@@ -185,24 +192,6 @@ public class Person implements Serializable {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @XmlTransient
-    public Collection<Client> getClientCollection() {
-        return clientCollection;
-    }
-
-    public void setClientCollection(Collection<Client> clientCollection) {
-        this.clientCollection = clientCollection;
-    }
-
-    @XmlTransient
-    public Collection<Employee> getEmployeeCollection() {
-        return employeeCollection;
-    }
-
-    public void setEmployeeCollection(Collection<Employee> employeeCollection) {
-        this.employeeCollection = employeeCollection;
     }
 
     @Override
