@@ -5,6 +5,7 @@
  */
 package mdd.casino.rest.entity;
 
+import java.util.Date;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,8 +17,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import mdd.casino.jpa.entity.facade.SaleFacade;
-import mdd.casino.jpa.entity.pojo.Sale;
+import mdd.casino.jpa.entity.facade.ClientFacade;
+import mdd.casino.jpa.entity.facade.OfficeFacade;
+import mdd.casino.jpa.entity.pojo.Client;
+import mdd.casino.jpa.entity.pojo.Office;
 import mdd.casino.util.BeanUtil;
 import mdd.casino.util.JsonUtil;
 
@@ -26,40 +29,33 @@ import mdd.casino.util.JsonUtil;
  *
  * @author dagofonseca
  */
-@Path("sale")
-public class SaleRest extends AbstractRest<Sale> {
+@Path("office")
+public class OfficeRest extends AbstractRest<Office> {
 
     @Context
     private UriInfo context;
 
-    SaleFacade facade = BeanUtil.lookupFacadeBean(SaleFacade.class);
+    OfficeFacade facade = BeanUtil.lookupFacadeBean(OfficeFacade.class);
 
-    public SaleRest() {
-        super(Sale.class);
+    public OfficeRest() {
+        super(Office.class);
     }
 
     @Override
-    public SaleFacade getFacade() {
+    public OfficeFacade getFacade() {
         return facade;
     }
 
     @POST
-    @Path("/sell")
+    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String obj_json) {
-        Sale obj = JsonUtil.jsonToObject(obj_json, Sale.class);
-        StringBuilder err = new StringBuilder();
-        facade.sell(obj, err);
+        Office obj = JsonUtil.jsonToObject(obj_json, Office.class);
+        obj.setCreatedAt(new Date());
+        obj.setUpdatedAt(new Date());
 
-        String result;
-        if (!err.toString().isEmpty()) {
-            result = "{\"error\":\"" + err.toString() + "\"}";
-        } else {
-            result = JsonUtil.objectToJson(obj);
-        }
-
-        return Response.status(200).entity(result).build();
+        return createDefault(obj);
     }
 
     @GET
@@ -80,11 +76,12 @@ public class SaleRest extends AbstractRest<Sale> {
     @Path("update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@PathParam("id") String id, String obj_json) {
-        Sale obj = JsonUtil.jsonToObject(obj_json, Sale.class);
-        Sale objOld = facade.find(new Integer(id));
+        Office obj = JsonUtil.jsonToObject(obj_json, Office.class);
+        Office objOld = facade.find(new Integer(id));
 
-        obj.setIdSale(objOld.getIdSale());
+        obj.setIdOffice(objOld.getIdOffice());
         obj.setCreatedAt(objOld.getCreatedAt());
+        obj.setUpdatedAt(new Date());
 
         return updateDefault(obj);
     }

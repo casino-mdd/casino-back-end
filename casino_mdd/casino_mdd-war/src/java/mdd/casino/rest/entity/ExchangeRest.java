@@ -16,8 +16,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import mdd.casino.jpa.entity.facade.SaleFacade;
-import mdd.casino.jpa.entity.pojo.Sale;
+import mdd.casino.jpa.entity.facade.ExchangeFacade;
+import mdd.casino.jpa.entity.pojo.Exchange;
 import mdd.casino.util.BeanUtil;
 import mdd.casino.util.JsonUtil;
 
@@ -26,37 +26,37 @@ import mdd.casino.util.JsonUtil;
  *
  * @author dagofonseca
  */
-@Path("sale")
-public class SaleRest extends AbstractRest<Sale> {
+@Path("exchange")
+public class ExchangeRest extends AbstractRest<Exchange> {
 
     @Context
     private UriInfo context;
 
-    SaleFacade facade = BeanUtil.lookupFacadeBean(SaleFacade.class);
+    ExchangeFacade facade = BeanUtil.lookupFacadeBean(ExchangeFacade.class);
 
-    public SaleRest() {
-        super(Sale.class);
+    public ExchangeRest() {
+        super(Exchange.class);
     }
 
     @Override
-    public SaleFacade getFacade() {
+    public ExchangeFacade getFacade() {
         return facade;
     }
 
     @POST
-    @Path("/sell")
+    @Path("/exchangeReward")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String obj_json) {
-        Sale obj = JsonUtil.jsonToObject(obj_json, Sale.class);
+        Exchange exchange = JsonUtil.jsonToObject(obj_json, Exchange.class);
         StringBuilder err = new StringBuilder();
-        facade.sell(obj, err);
+        facade.exchangeReward(exchange, err);
 
         String result;
         if (!err.toString().isEmpty()) {
             result = "{\"error\":\"" + err.toString() + "\"}";
         } else {
-            result = JsonUtil.objectToJson(obj);
+            result = JsonUtil.objectToJson(exchange);
         }
 
         return Response.status(200).entity(result).build();
@@ -80,10 +80,10 @@ public class SaleRest extends AbstractRest<Sale> {
     @Path("update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@PathParam("id") String id, String obj_json) {
-        Sale obj = JsonUtil.jsonToObject(obj_json, Sale.class);
-        Sale objOld = facade.find(new Integer(id));
+        Exchange obj = JsonUtil.jsonToObject(obj_json, Exchange.class);
+        Exchange objOld = facade.find(new Integer(id));
 
-        obj.setIdSale(objOld.getIdSale());
+        obj.setIdExchange(objOld.getIdExchange());
         obj.setCreatedAt(objOld.getCreatedAt());
 
         return updateDefault(obj);

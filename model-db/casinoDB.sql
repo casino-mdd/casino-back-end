@@ -73,7 +73,7 @@ Create table  User_account
 	 updated_At  Timestamp NOT NULL,
 	 created_At  Timestamp NOT NULL,
 	 is_active  Boolean NOT NULL Default true,
-	 profile Varchar NOT NULL
+	 profile Varchar NOT NULL,
  primary key ( id_user_account )
 ) Without Oids;
 

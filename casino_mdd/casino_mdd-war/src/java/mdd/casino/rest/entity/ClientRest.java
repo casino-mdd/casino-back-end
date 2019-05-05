@@ -5,6 +5,7 @@
  */
 package mdd.casino.rest.entity;
 
+import java.util.Date;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,8 +17,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import mdd.casino.jpa.entity.facade.SaleFacade;
-import mdd.casino.jpa.entity.pojo.Sale;
+import mdd.casino.jpa.entity.facade.ClientFacade;
+import mdd.casino.jpa.entity.pojo.Client;
 import mdd.casino.util.BeanUtil;
 import mdd.casino.util.JsonUtil;
 
@@ -26,40 +27,33 @@ import mdd.casino.util.JsonUtil;
  *
  * @author dagofonseca
  */
-@Path("sale")
-public class SaleRest extends AbstractRest<Sale> {
+@Path("client")
+public class ClientRest extends AbstractRest<Client> {
 
     @Context
     private UriInfo context;
 
-    SaleFacade facade = BeanUtil.lookupFacadeBean(SaleFacade.class);
+    ClientFacade facade = BeanUtil.lookupFacadeBean(ClientFacade.class);
 
-    public SaleRest() {
-        super(Sale.class);
+    public ClientRest() {
+        super(Client.class);
     }
 
     @Override
-    public SaleFacade getFacade() {
+    public ClientFacade getFacade() {
         return facade;
     }
 
     @POST
-    @Path("/sell")
+    @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String obj_json) {
-        Sale obj = JsonUtil.jsonToObject(obj_json, Sale.class);
-        StringBuilder err = new StringBuilder();
-        facade.sell(obj, err);
+        Client obj = JsonUtil.jsonToObject(obj_json, Client.class);
+        obj.setCreatedAt(new Date());
+        obj.setUpdatedAt(new Date());
 
-        String result;
-        if (!err.toString().isEmpty()) {
-            result = "{\"error\":\"" + err.toString() + "\"}";
-        } else {
-            result = JsonUtil.objectToJson(obj);
-        }
-
-        return Response.status(200).entity(result).build();
+        return createDefault(obj);
     }
 
     @GET
@@ -80,11 +74,12 @@ public class SaleRest extends AbstractRest<Sale> {
     @Path("update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@PathParam("id") String id, String obj_json) {
-        Sale obj = JsonUtil.jsonToObject(obj_json, Sale.class);
-        Sale objOld = facade.find(new Integer(id));
+        Client obj = JsonUtil.jsonToObject(obj_json, Client.class);
+        Client objOld = facade.find(new Integer(id));
 
-        obj.setIdSale(objOld.getIdSale());
+        obj.setIdClient(objOld.getIdClient());
         obj.setCreatedAt(objOld.getCreatedAt());
+        obj.setUpdatedAt(new Date());
 
         return updateDefault(obj);
     }
