@@ -6,10 +6,8 @@
 package mdd.casino.jpa.entity.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,14 +15,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -74,12 +70,6 @@ public class Office implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOffice")
-    private Collection<Reward> rewardCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOffice")
-    private Collection<Sale> saleCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idOffice")
-    private Collection<Employee> employeeCollection;
 
     public Office() {
     }
@@ -145,33 +135,6 @@ public class Office implements Serializable {
         this.createdAt = createdAt;
     }
 
-    @XmlTransient
-    public Collection<Reward> getRewardCollection() {
-        return rewardCollection;
-    }
-
-    public void setRewardCollection(Collection<Reward> rewardCollection) {
-        this.rewardCollection = rewardCollection;
-    }
-
-    @XmlTransient
-    public Collection<Sale> getSaleCollection() {
-        return saleCollection;
-    }
-
-    public void setSaleCollection(Collection<Sale> saleCollection) {
-        this.saleCollection = saleCollection;
-    }
-
-    @XmlTransient
-    public Collection<Employee> getEmployeeCollection() {
-        return employeeCollection;
-    }
-
-    public void setEmployeeCollection(Collection<Employee> employeeCollection) {
-        this.employeeCollection = employeeCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -196,5 +159,5 @@ public class Office implements Serializable {
     public String toString() {
         return "mdd.casino.jpa.entity.pojo.Office[ idOffice=" + idOffice + " ]";
     }
-    
+
 }

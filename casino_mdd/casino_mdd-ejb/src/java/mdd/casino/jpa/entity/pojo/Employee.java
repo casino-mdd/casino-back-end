@@ -6,10 +6,8 @@
 package mdd.casino.jpa.entity.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,14 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -70,12 +66,6 @@ public class Employee implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmployee")
-    private Collection<Sale> saleCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmployee")
-    private Collection<Exchange> exchangeCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idEmployee")
-    private Collection<UserAccount> userAccountCollection;
     @JoinColumn(name = "id_office", referencedColumnName = "id_office")
     @ManyToOne(optional = false)
     private Office idOffice;
@@ -136,33 +126,6 @@ public class Employee implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    @XmlTransient
-    public Collection<Sale> getSaleCollection() {
-        return saleCollection;
-    }
-
-    public void setSaleCollection(Collection<Sale> saleCollection) {
-        this.saleCollection = saleCollection;
-    }
-
-    @XmlTransient
-    public Collection<Exchange> getExchangeCollection() {
-        return exchangeCollection;
-    }
-
-    public void setExchangeCollection(Collection<Exchange> exchangeCollection) {
-        this.exchangeCollection = exchangeCollection;
-    }
-
-    @XmlTransient
-    public Collection<UserAccount> getUserAccountCollection() {
-        return userAccountCollection;
-    }
-
-    public void setUserAccountCollection(Collection<UserAccount> userAccountCollection) {
-        this.userAccountCollection = userAccountCollection;
     }
 
     public Office getIdOffice() {

@@ -6,10 +6,8 @@
 package mdd.casino.jpa.entity.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,13 +17,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -57,13 +53,9 @@ public class Client implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
-    private Collection<Sale> saleCollection;
     @JoinColumn(name = "id_person", referencedColumnName = "id_person")
     @ManyToOne(optional = false)
     private Person idPerson;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClient")
-    private Collection<Exchange> exchangeCollection;
 
     public Client() {
     }
@@ -102,30 +94,12 @@ public class Client implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    @XmlTransient
-    public Collection<Sale> getSaleCollection() {
-        return saleCollection;
-    }
-
-    public void setSaleCollection(Collection<Sale> saleCollection) {
-        this.saleCollection = saleCollection;
-    }
-
     public Person getIdPerson() {
         return idPerson;
     }
 
     public void setIdPerson(Person idPerson) {
         this.idPerson = idPerson;
-    }
-
-    @XmlTransient
-    public Collection<Exchange> getExchangeCollection() {
-        return exchangeCollection;
-    }
-
-    public void setExchangeCollection(Collection<Exchange> exchangeCollection) {
-        this.exchangeCollection = exchangeCollection;
     }
 
     @Override
@@ -152,5 +126,5 @@ public class Client implements Serializable {
     public String toString() {
         return "mdd.casino.jpa.entity.pojo.Client[ idClient=" + idClient + " ]";
     }
-    
+
 }

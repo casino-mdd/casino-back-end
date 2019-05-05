@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author dagofonseca
+ * @author masterdev
  */
 @Entity
 @Table(name = "user_account")
@@ -38,7 +38,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "UserAccount.findByPassword", query = "SELECT u FROM UserAccount u WHERE u.password = :password")
     , @NamedQuery(name = "UserAccount.findByUpdatedAt", query = "SELECT u FROM UserAccount u WHERE u.updatedAt = :updatedAt")
     , @NamedQuery(name = "UserAccount.findByCreatedAt", query = "SELECT u FROM UserAccount u WHERE u.createdAt = :createdAt")
-    , @NamedQuery(name = "UserAccount.findByIsActive", query = "SELECT u FROM UserAccount u WHERE u.isActive = :isActive")})
+    , @NamedQuery(name = "UserAccount.findByIsActive", query = "SELECT u FROM UserAccount u WHERE u.isActive = :isActive")
+    , @NamedQuery(name = "UserAccount.findByProfile", query = "SELECT u FROM UserAccount u WHERE u.profile = :profile")})
 public class UserAccount implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -71,6 +72,11 @@ public class UserAccount implements Serializable {
     @NotNull
     @Column(name = "is_active")
     private boolean isActive;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2147483647)
+    @Column(name = "profile")
+    private String profile;
     @JoinColumn(name = "id_employee", referencedColumnName = "id_employee")
     @ManyToOne(optional = false)
     private Employee idEmployee;
@@ -82,13 +88,14 @@ public class UserAccount implements Serializable {
         this.idUserAccount = idUserAccount;
     }
 
-    public UserAccount(Integer idUserAccount, String username, String password, Date updatedAt, Date createdAt, boolean isActive) {
+    public UserAccount(Integer idUserAccount, String username, String password, Date updatedAt, Date createdAt, boolean isActive, String profile) {
         this.idUserAccount = idUserAccount;
         this.username = username;
         this.password = password;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
         this.isActive = isActive;
+        this.profile = profile;
     }
 
     public Integer getIdUserAccount() {
@@ -137,6 +144,14 @@ public class UserAccount implements Serializable {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     public Employee getIdEmployee() {

@@ -31,6 +31,8 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(mdd.casino.rest.entity.EmployeeRest.class);
         resources.add(mdd.casino.rest.entity.PersonRest.class);
+        resources.add(mdd.casino.rest.entity.SaleRest.class);
+        resources.add(mdd.casino.rest.entity.UserAccountRest.class);
     }
     
 }

@@ -6,9 +6,7 @@
 package mdd.casino.rest.entity;
 
 import java.util.Date;
-import java.util.List;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -30,88 +28,81 @@ import mdd.casino.util.JsonUtil;
  * @author dagofonseca
  */
 @Path("person")
-public class PersonRest {
+public class PersonRest extends AbstractRest<Person> {
 
     @Context
     private UriInfo context;
 
-    PersonFacade personFacade = BeanUtil.lookupFacadeBean(PersonFacade.class);
+    PersonFacade facade = BeanUtil.lookupFacadeBean(PersonFacade.class);
 
-    /**
-     * Creates a new instance of PersonRest
-     */
     public PersonRest() {
+        super(Person.class);
+    }
+
+    @Override
+    public PersonFacade getFacade() {
+        return facade;
     }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public String hello() {
-        Person p=personFacade.find(0);
-        return "hello "+p.getName();
+        Person p = facade.find(0);
+        return "hello " + p.getName();
     }
-    
+
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create( String obj_json) { 
-                
-        Person p = JsonUtil.jsonToObject(obj_json, Person.class);
-        p.setCreatedAt(new Date());
-        p.setUpdatedAt(new Date());
-        try{
-            personFacade.create(p);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        String result = JsonUtil.objectToJson(p);
-        return Response.status(200).entity(result).build();
+    public Response create(String obj_json) {
+        Person obj = JsonUtil.jsonToObject(obj_json, Person.class);
+        obj.setCreatedAt(new Date());
+        obj.setUpdatedAt(new Date());
+
+        return createDefault(obj);
     }
-    
+
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public String list() {
-        List<Person> lst = personFacade.findAll();
-        return JsonUtil.objectToJson(lst);
-    }    
-    
+        return listDefault();
+    }
+
     @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") String id) {
-        Person p = personFacade.find(new Integer(id));
-        return JsonUtil.objectToJson(p);
+        return findDefault(new Integer(id));
     }
-    
-    @GET
-    @Path("update/{obj_json}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String update(@PathParam("obj_json") String obj_json) {
-        Person p = JsonUtil.jsonToObject(obj_json, Person.class);  
-        Person pOri =  personFacade.find(p.getIdPerson());
-        p.setUpdatedAt(new Date());
-        p.setCreatedAt(pOri.getCreatedAt());
-        try{
-            personFacade.edit(p);
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        return JsonUtil.objectToJson(p);
-    }
+
     @PUT
+    @Path("update/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String update(@PathParam("id") String id, String obj_json) {
+        Person obj = JsonUtil.jsonToObject(obj_json, Person.class);
+        Person objOld = facade.find(new Integer(id));
+
+        obj.setIdPerson(objOld.getIdPerson());
+        obj.setCreatedAt(objOld.getCreatedAt());
+        obj.setUpdatedAt(new Date());
+
+        return updateDefault(obj);
+    }
+
+    /*@PUT
     @Path("/prueba2/{param}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response putMsg(@PathParam("param") String msg,  String obj_json) {
+    public Response putMsg(@PathParam("param") String msg, String obj_json) {
         String output = "PUT: Jersey say : " + msg + obj_json;
         return Response.status(200).entity(output).build();
     }
+
     @DELETE
     @Path("/delete/{param}")
     public Response deleteMsg(@PathParam("param") String msg) {
         String output = "DELETE:Jersey say : " + msg;
         return Response.status(200).entity(output).build();
-    }
+    }*/
 }

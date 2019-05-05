@@ -6,10 +6,8 @@
 package mdd.casino.jpa.entity.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,14 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -77,8 +73,6 @@ public class Sale implements Serializable {
     @JoinColumn(name = "id_office", referencedColumnName = "id_office")
     @ManyToOne(optional = false)
     private Office idOffice;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSale")
-    private Collection<Point> pointCollection;
 
     public Sale() {
     }
@@ -159,15 +153,6 @@ public class Sale implements Serializable {
         this.idOffice = idOffice;
     }
 
-    @XmlTransient
-    public Collection<Point> getPointCollection() {
-        return pointCollection;
-    }
-
-    public void setPointCollection(Collection<Point> pointCollection) {
-        this.pointCollection = pointCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -192,5 +177,5 @@ public class Sale implements Serializable {
     public String toString() {
         return "mdd.casino.jpa.entity.pojo.Sale[ idSale=" + idSale + " ]";
     }
-    
+
 }

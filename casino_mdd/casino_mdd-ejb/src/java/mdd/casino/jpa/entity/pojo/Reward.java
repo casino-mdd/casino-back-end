@@ -6,9 +6,7 @@
 package mdd.casino.jpa.entity.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,12 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -62,8 +58,6 @@ public class Reward implements Serializable {
     @JoinColumn(name = "id_office", referencedColumnName = "id_office")
     @ManyToOne(optional = false)
     private Office idOffice;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idReward")
-    private Collection<Exchange> exchangeCollection;
 
     public Reward() {
     }
@@ -119,15 +113,6 @@ public class Reward implements Serializable {
         this.idOffice = idOffice;
     }
 
-    @XmlTransient
-    public Collection<Exchange> getExchangeCollection() {
-        return exchangeCollection;
-    }
-
-    public void setExchangeCollection(Collection<Exchange> exchangeCollection) {
-        this.exchangeCollection = exchangeCollection;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -152,5 +137,5 @@ public class Reward implements Serializable {
     public String toString() {
         return "mdd.casino.jpa.entity.pojo.Reward[ idReward=" + idReward + " ]";
     }
-    
+
 }
