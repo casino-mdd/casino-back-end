@@ -25,5 +25,9 @@ public class EmployeeFacade extends AbstractFacade<Employee> {
     public EmployeeFacade() {
         super(Employee.class);
     }
-
+    
+    public Employee findByIdentification(String identification){
+        String hql = "SELECT c FROM Employee c WHERE c.idPerson.identificationNumber = '" + identification + "'";
+        return objectFromHQL(hql);
+    }
 }

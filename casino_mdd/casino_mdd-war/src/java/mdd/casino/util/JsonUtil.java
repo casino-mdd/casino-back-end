@@ -6,7 +6,11 @@
 package mdd.casino.util;
 
 import com.google.gson.Gson;
+import java.util.Date;
+import java.util.Set;
 import mdd.casino.jpa.entity.facade.PersonFacade;
+import mdd.casino.jpa.entity.pojo.Employee;
+import mdd.casino.jpa.entity.pojo.Office;
 import mdd.casino.jpa.entity.pojo.Person;
 import mdd.casino.jpa.entity.pojo.UserAccount;
 
@@ -26,7 +30,7 @@ public class JsonUtil {
     }
 
     public static void main(String... args) throws Exception {
-        /*Person p = new Person();
+        Person p = new Person();
         p.setName("Pedro");
         p.setAge(29);
         p.setEmail("pedro@correo.com");
@@ -34,9 +38,23 @@ public class JsonUtil {
         p.setSurname("Perez");
         p.setPhone(new Long("3105112233"));
         p.setIdentificationNumber("123456");
-               
+        
+        Office o = new Office();
+        o.setAddress("calle 123 #45-67");
+        o.setCity("Bogotá");
+        o.setName("Oficina Dragón");
+        o.setCreatedAt(new Date());
+        o.setUpdatedAt(new Date());
+        
+        
+        Employee e = new Employee();
+        e.setPosition("CAJERO");        
+        e.setAdmitionDate(new Date());        
+        e.setIdPerson(p);
+        e.setIdOffice(o);
+                        
        
-        System.out.println(objectToJson(p));*/
+        System.out.println(objectToJson(e));
 
         String json = "{\n"
                 + "  \"username\": \"admin\",\n"

@@ -35,6 +35,7 @@ public class SaleFacade extends AbstractFacade<Sale> {
         try {
 
             //1. Save Sale
+            sale.setCreatedAt(new Date());
             sess.save(sale);
 
             //2. Add points
@@ -43,7 +44,7 @@ public class SaleFacade extends AbstractFacade<Sale> {
 
             Point p = new Point();
             p.setTotalPoints(nPoints);
-            p.setExpDate(new Date(new Date().getTime() + nDaysExpired * 24 * 60 * 60));
+            p.setExpDate(new Date(new Date().getTime() + nDaysExpired * 24 * 60 * 60 * 1000));
             p.setCreatedAt(new Date());
             p.setIdSale(sale);
             sess.save(p);

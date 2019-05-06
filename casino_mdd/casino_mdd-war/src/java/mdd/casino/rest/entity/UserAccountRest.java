@@ -5,7 +5,9 @@
  */
 package mdd.casino.rest.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,6 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import mdd.casino.jpa.entity.dto.UserAccountDto;
 import mdd.casino.jpa.entity.facade.UserAccountFacade;
 import mdd.casino.jpa.entity.pojo.UserAccount;
 import mdd.casino.util.BeanUtil;
@@ -57,6 +60,22 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
         
         return createDefault(obj);
     }
+        
+    private UserAccountDto parseUserAccount(UserAccount u){
+        
+        String status = (u.getIsActive()) ? "Activo" : "Inactivo";
+        UserAccountDto dto = new UserAccountDto();
+        
+        dto.setCreatedAt(u.getCreatedAt());
+        dto.setUsername(u.getUsername());
+        dto.setIdUserAccount(u.getIdUserAccount());
+        dto.setPassword(u.getPassword());
+        dto.setPosition(u.getIdEmployee().getPosition());
+        dto.setUpdatedAt(u.getUpdatedAt());        
+        dto.setStatus(status);
+               
+        return dto;
+    }
     
     @GET
     @Path("list")
@@ -66,10 +85,32 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
     }
     
     @GET
+    @Path("listdto")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listDto() {
+        List<UserAccount> lstOri = facade.findAll();
+        List<UserAccountDto> lstDto = new ArrayList();
+        for (UserAccount c : lstOri) {
+            UserAccountDto dto = parseUserAccount(c);            
+            lstDto.add(dto);
+        }
+        return JsonUtil.objectToJson(lstDto);
+    }
+    
+    @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") String id) {
         return findDefault(new Integer(id));
+    }
+    
+    @GET
+    @Path("finddto/{username}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String findByUsername(@PathParam("username") String username) {
+        UserAccount u = facade.findByUsername(username);
+        UserAccountDto dto = parseUserAccount(u);
+        return JsonUtil.objectToJson(dto);
     }
     
     @PUT
@@ -79,7 +120,7 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
         UserAccount obj = JsonUtil.jsonToObject(obj_json, UserAccount.class);
         UserAccount objOld = facade.find(new Integer(id));
         
-        obj.setIdEmployee(objOld.getIdEmployee());
+        obj.setIdUserAccount(objOld.getIdUserAccount());
         obj.setCreatedAt(objOld.getCreatedAt());
         obj.setUpdatedAt(new Date());
         

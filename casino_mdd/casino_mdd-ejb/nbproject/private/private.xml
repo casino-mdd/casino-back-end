@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/opt/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/UserAccountFacade.java</file>
-            <file>file:/opt/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/pojo/UserAccount.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/dto/UserAccountDto.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/PointFacade.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/dto/PointDto.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/RewardFacade.java</file>
         </group>
     </open-files>
 </project-private>

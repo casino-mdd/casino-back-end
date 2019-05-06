@@ -5,7 +5,9 @@
  */
 package mdd.casino.rest.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,6 +19,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import mdd.casino.jpa.entity.dto.EmployeeDto;
 import mdd.casino.jpa.entity.facade.EmployeeFacade;
 import mdd.casino.jpa.entity.pojo.Employee;
 import mdd.casino.util.BeanUtil;
@@ -56,6 +59,20 @@ public class EmployeeRest extends AbstractRest<Employee> {
         return createDefault(obj);
     }
     
+    private EmployeeDto parseEmployee(Employee c){
+        EmployeeDto dto = new EmployeeDto();
+        dto.setAdmissionDate(c.getAdmitionDate());
+        dto.setEmail(c.getIdPerson().getEmail());
+        dto.setIdEmployee(c.getIdEmployee());
+        dto.setIdentificationNumber(c.getIdPerson().getIdentificationNumber());
+        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname());
+        dto.setOffice(c.getIdOffice().getName());
+        dto.setPhone(c.getIdPerson().getPhone()+"");
+        dto.setPosition(c.getPosition());
+        
+        return dto;
+    }
+    
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
@@ -64,10 +81,35 @@ public class EmployeeRest extends AbstractRest<Employee> {
     }
     
     @GET
+    @Path("listdto")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listDto() {
+        List<Employee> lstOri = employeeFacade.findAll();
+        List<EmployeeDto> lstDto = new ArrayList();
+        for (Employee c : lstOri) {
+            EmployeeDto dto = parseEmployee(c);            
+            lstDto.add(dto);
+        }
+        return JsonUtil.objectToJson(lstDto);
+    }
+    
+    @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") String id) {
         return findDefault(new Integer(id));
+    }
+    
+    @GET
+    @Path("finddto/{identification}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String findByIdentification(@PathParam("identification") String identification) {
+        Employee c = employeeFacade.findByIdentification(identification);
+        if (c == null){
+            return "{ \"error\": \"Número de identificación no está registrado\" }";
+        }
+        EmployeeDto dto = parseEmployee(c);
+        return JsonUtil.objectToJson(dto);
     }
     
     @PUT

@@ -7,6 +7,7 @@ package mdd.casino.jpa.entity.facade;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,8 +36,19 @@ public class PointFacade extends AbstractFacade<Point> {
         String hql = "SELECT sum(p.totalPoints) "
                 + "   FROM Point p "
                 + "  WHERE p.idSale.idClient.idClient=" + idclient
-                + "     AND p.expDate<='" + format.format(now) + "'";
+                + "     AND p.expDate >='" + format.format(now) + "'";
         return numFromHQL(hql, new Long(0)).intValue();
+    }
+    
+    public List<Point> listPointsAviable(Integer idclient) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+
+        String hql = "SELECT p "
+                + "   FROM Point p "
+                + "  WHERE p.idSale.idClient.idClient=" + idclient
+                + "     AND p.expDate >='" + format.format(now) + "'";
+        return findList(hql);
     }
 
 }

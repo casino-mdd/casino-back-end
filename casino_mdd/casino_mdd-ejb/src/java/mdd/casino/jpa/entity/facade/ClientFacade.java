@@ -25,5 +25,10 @@ public class ClientFacade extends AbstractFacade<Client> {
     public ClientFacade() {
         super(Client.class);
     }
+    
+    public Client findByIdentification(String identification){
+        String hql = "SELECT c FROM Client c WHERE c.idPerson.identificationNumber = '" + identification + "'";
+        return objectFromHQL(hql);
+    }
 
 }

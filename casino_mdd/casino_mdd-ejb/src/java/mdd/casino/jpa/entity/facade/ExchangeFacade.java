@@ -5,12 +5,14 @@
  */
 package mdd.casino.jpa.entity.facade;
 
+import java.util.Date;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import mdd.casino.jpa.entity.pojo.Exchange;
+import mdd.casino.jpa.entity.pojo.Reward;
 import org.hibernate.impl.SessionImpl;
 
 @Stateless
@@ -18,6 +20,9 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
 
     @EJB
     PointFacade pointFacade;
+    
+    @EJB
+    RewardFacade rewardFacade;
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -33,7 +38,8 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
 
     public void exchangeReward(Exchange exchange, StringBuilder err) {
         //0. Validate
-        int pointsWin = 40;
+        Reward r = rewardFacade.find(exchange.getIdReward());
+        int pointsWin = r.getPointsNeed();
         int np = pointFacade.sumPointsAviable(exchange.getIdClient().getIdClient());
         if (np < pointsWin) {
             err.append("Para reclamar el premio deben tenerse ").append(pointsWin).append(" punto(s), y el cliente tiene ").append(np);
@@ -45,6 +51,7 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
         try {
 
             //1. Save Sale
+            exchange.setCreatedAt(new Date());
             sess.save(exchange);
 
             //2. Update reward
