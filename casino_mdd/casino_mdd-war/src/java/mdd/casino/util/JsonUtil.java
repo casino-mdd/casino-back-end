@@ -7,7 +7,6 @@ package mdd.casino.util;
 
 import com.google.gson.Gson;
 import java.util.Date;
-import java.util.Set;
 import mdd.casino.jpa.entity.facade.PersonFacade;
 import mdd.casino.jpa.entity.pojo.Employee;
 import mdd.casino.jpa.entity.pojo.Office;
