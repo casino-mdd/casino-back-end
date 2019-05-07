@@ -6,6 +6,7 @@
 package mdd.casino.jpa.entity.facade;
 
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -20,13 +21,13 @@ import org.hibernate.impl.SessionImpl;
 
 @Stateless
 public class SaleFacade extends AbstractFacade<Sale> {
-    
+
     @EJB
     ClientFacade clientFacade;
-    
+
     @EJB
     EmployeeFacade employeeFacade;
-    
+
     @PersistenceUnit
     private EntityManagerFactory emf;
 
@@ -67,27 +68,32 @@ public class SaleFacade extends AbstractFacade<Sale> {
         }
         endTransaction();
     }
-    
+
     public void sell(SaleDto dto, StringBuilder err) {
         Sale s = new Sale();
         Client c = clientFacade.findByIdentification(dto.getIdenNumClient());
-        if (c == null){
+        if (c == null) {
             err.append("Cliente no encontrado");
             return;
         }
         Employee em = employeeFacade.findByIdentification(dto.getIdenNumEmployee());
-        if (em == null){
+        if (em == null) {
             err.append("Empleado no encontrado");
             return;
         }
-        
+
         s.setCost(dto.getCost());
         s.setIdClient(c);
         s.setIdEmployee(em);
         s.setIdOffice(em.getIdOffice());
         s.setPaymentMethod(dto.getPaymentMethod());
         s.setToken(dto.getToken());
-        
+
         sell(s, err);
+    }
+
+    public List<Sale> listByIdClient(Integer idclient) {
+        String hql = "SELECT s FROM Sale s WHERE s.idClient.idClient=" + idclient;
+        return findList(hql);
     }
 }

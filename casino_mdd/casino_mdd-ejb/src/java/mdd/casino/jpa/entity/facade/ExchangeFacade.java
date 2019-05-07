@@ -6,6 +6,7 @@
 package mdd.casino.jpa.entity.facade;
 
 import java.util.Date;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -23,13 +24,13 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
 
     @EJB
     PointFacade pointFacade;
-    
+
     @EJB
     RewardFacade rewardFacade;
-    
+
     @EJB
     ClientFacade clientFacade;
-    
+
     @EJB
     EmployeeFacade employeeFacade;
 
@@ -84,23 +85,28 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
         }
         endTransaction();
     }
-    
+
     public void exchangeReward(ExchangeDto dto, StringBuilder err) {
         Exchange ex = new Exchange();
         Client c = clientFacade.findByIdentification(dto.getIdenNumClient());
-        if (c == null){
+        if (c == null) {
             err.append("Cliente no encontrado");
             return;
         }
         Employee em = employeeFacade.findByIdentification(dto.getIdenNumEmployee());
-        if (em == null){
+        if (em == null) {
             err.append("Empleado no encontrado");
             return;
         }
-        
+
         ex.setIdClient(c);
         ex.setIdEmployee(em);
         ex.setIdReward(new Reward(dto.getIdReward()));
         exchangeReward(ex, err);
+    }
+
+    public List<Exchange> listByIdClient(Integer idclient) {
+        String hql = "SELECT e FROM Exchange e WHERE e.idClient.idClient=" + idclient;
+        return findList(hql);
     }
 }

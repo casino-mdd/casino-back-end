@@ -14,6 +14,8 @@ public class RewardDto {
     private Integer idReward;
     private String name;
     private int pointsNeed;
+    private String identNumberEmployee;
+    private boolean isAvailable;
 
     public Integer getIdReward() {
         return idReward;
@@ -37,6 +39,22 @@ public class RewardDto {
 
     public void setPointsNeed(int pointsNeed) {
         this.pointsNeed = pointsNeed;
+    }
+
+    public String getIdentNumberEmployee() {
+        return identNumberEmployee;
+    }
+
+    public void setIdentNumberEmployee(String identNumberEmployee) {
+        this.identNumberEmployee = identNumberEmployee;
+    }
+
+    public boolean isIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
     }
         
 }

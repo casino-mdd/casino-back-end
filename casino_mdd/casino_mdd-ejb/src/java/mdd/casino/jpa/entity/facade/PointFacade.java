@@ -7,6 +7,7 @@ package mdd.casino.jpa.entity.facade;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -39,7 +40,28 @@ public class PointFacade extends AbstractFacade<Point> {
                 + "     AND p.expDate >='" + format.format(now) + "'";
         return numFromHQL(hql, new Long(0)).intValue();
     }
-    
+
+    /**
+     *
+     * @return Map<key: idclient, val: sumPoints>
+     */
+    public HashMap<Integer, Long> mapPointsByIdClient() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+
+        String hql = "SELECT sum(p.totalPoints),p.idSale.idClient.idClient "
+                + "   FROM Point p "
+                + "     WHERE p.expDate >='" + format.format(now) + "'"
+                + " GROUP BY p.idSale.idClient.idClient";
+
+        HashMap<Integer, Long> map = new HashMap<>();
+        List<Object[]> lst = findGeneric(hql);
+        for (Object[] o : lst) {
+            map.put((Integer) o[1], (Long) o[0]);
+        }
+        return map;
+    }
+
     public List<Point> listPointsAviable(Integer idclient) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();

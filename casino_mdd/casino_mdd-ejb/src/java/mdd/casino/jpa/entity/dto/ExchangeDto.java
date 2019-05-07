@@ -5,15 +5,21 @@
  */
 package mdd.casino.jpa.entity.dto;
 
+import java.util.Date;
+
 /**
  *
  * @author dagofonseca
  */
 public class ExchangeDto {
-    
+
     private String idenNumClient;
     private String idenNumEmployee;
     private Integer idReward;
+    private String client;
+    private String reward;
+    private String employee;
+    private Date date;
 
     public String getIdenNumClient() {
         return idenNumClient;
@@ -38,6 +44,37 @@ public class ExchangeDto {
     public void setIdReward(Integer idReward) {
         this.idReward = idReward;
     }
-    
-    
+
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    public String getReward() {
+        return reward;
+    }
+
+    public void setReward(String reward) {
+        this.reward = reward;
+    }
+
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
 }

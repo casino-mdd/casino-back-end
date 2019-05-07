@@ -10,12 +10,16 @@ package mdd.casino.jpa.entity.dto;
  * @author dagofonseca
  */
 public class SaleDto {
-    
+
     private String idenNumClient;
     private String idenNumEmployee;
     private int token;
     private double cost;
     private String paymentMethod;
+
+    private String client;
+    private String employee;
+    private int points;
 
     public String getIdenNumClient() {
         return idenNumClient;
@@ -56,7 +60,31 @@ public class SaleDto {
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
+
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    public String getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(String employee) {
+        this.employee = employee;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
     
     
-    
+
 }
