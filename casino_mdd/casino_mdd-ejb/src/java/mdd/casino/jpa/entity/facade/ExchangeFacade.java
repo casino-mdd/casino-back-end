@@ -11,6 +11,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import mdd.casino.jpa.entity.dto.ExchangeDto;
+import mdd.casino.jpa.entity.pojo.Client;
+import mdd.casino.jpa.entity.pojo.Employee;
 import mdd.casino.jpa.entity.pojo.Exchange;
 import mdd.casino.jpa.entity.pojo.Reward;
 import org.hibernate.impl.SessionImpl;
@@ -23,6 +26,12 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
     
     @EJB
     RewardFacade rewardFacade;
+    
+    @EJB
+    ClientFacade clientFacade;
+    
+    @EJB
+    EmployeeFacade employeeFacade;
 
     @PersistenceUnit
     private EntityManagerFactory emf;
@@ -38,7 +47,7 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
 
     public void exchangeReward(Exchange exchange, StringBuilder err) {
         //0. Validate
-        Reward r = rewardFacade.find(exchange.getIdReward());
+        Reward r = rewardFacade.find(exchange.getIdReward().getIdReward());
         int pointsWin = r.getPointsNeed();
         int np = pointFacade.sumPointsAviable(exchange.getIdClient().getIdClient());
         if (np < pointsWin) {
@@ -75,5 +84,23 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
         }
         endTransaction();
     }
-
+    
+    public void exchangeReward(ExchangeDto dto, StringBuilder err) {
+        Exchange ex = new Exchange();
+        Client c = clientFacade.findByIdentification(dto.getIdenNumClient());
+        if (c == null){
+            err.append("Cliente no encontrado");
+            return;
+        }
+        Employee em = employeeFacade.findByIdentification(dto.getIdenNumEmployee());
+        if (em == null){
+            err.append("Empleado no encontrado");
+            return;
+        }
+        
+        ex.setIdClient(c);
+        ex.setIdEmployee(em);
+        ex.setIdReward(new Reward(dto.getIdReward()));
+        exchangeReward(ex, err);
+    }
 }

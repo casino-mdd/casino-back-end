@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import mdd.casino.jpa.entity.dto.SaleDto;
 import mdd.casino.jpa.entity.facade.SaleFacade;
 import mdd.casino.jpa.entity.pojo.Sale;
 import mdd.casino.util.BeanUtil;
@@ -48,7 +49,7 @@ public class SaleRest extends AbstractRest<Sale> {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String obj_json) {
-        Sale obj = JsonUtil.jsonToObject(obj_json, Sale.class);
+        SaleDto obj = JsonUtil.jsonToObject(obj_json, SaleDto.class);
         StringBuilder err = new StringBuilder();
         facade.sell(obj, err);
 

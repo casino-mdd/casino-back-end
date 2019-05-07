@@ -16,6 +16,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import mdd.casino.jpa.entity.dto.ExchangeDto;
 import mdd.casino.jpa.entity.facade.ExchangeFacade;
 import mdd.casino.jpa.entity.pojo.Exchange;
 import mdd.casino.util.BeanUtil;
@@ -42,21 +43,24 @@ public class ExchangeRest extends AbstractRest<Exchange> {
     public ExchangeFacade getFacade() {
         return facade;
     }
-
+            
     @POST
     @Path("/exchangeReward")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String obj_json) {
-        Exchange exchange = JsonUtil.jsonToObject(obj_json, Exchange.class);
+        
+        ExchangeDto dto = JsonUtil.jsonToObject(obj_json, ExchangeDto.class);
+        
+        
         StringBuilder err = new StringBuilder();
-        facade.exchangeReward(exchange, err);
+        facade.exchangeReward(dto, err);
 
         String result;
         if (!err.toString().isEmpty()) {
             result = "{\"error\":\"" + err.toString() + "\"}";
         } else {
-            result = JsonUtil.objectToJson(exchange);
+            result = JsonUtil.objectToJson(dto);
         }
 
         return Response.status(200).entity(result).build();

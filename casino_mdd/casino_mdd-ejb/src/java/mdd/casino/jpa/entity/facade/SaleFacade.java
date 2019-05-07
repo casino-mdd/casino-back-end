@@ -6,17 +6,27 @@
 package mdd.casino.jpa.entity.facade;
 
 import java.util.Date;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import mdd.casino.jpa.entity.dto.SaleDto;
+import mdd.casino.jpa.entity.pojo.Client;
+import mdd.casino.jpa.entity.pojo.Employee;
 import mdd.casino.jpa.entity.pojo.Point;
 import mdd.casino.jpa.entity.pojo.Sale;
 import org.hibernate.impl.SessionImpl;
 
 @Stateless
 public class SaleFacade extends AbstractFacade<Sale> {
-
+    
+    @EJB
+    ClientFacade clientFacade;
+    
+    @EJB
+    EmployeeFacade employeeFacade;
+    
     @PersistenceUnit
     private EntityManagerFactory emf;
 
@@ -57,5 +67,27 @@ public class SaleFacade extends AbstractFacade<Sale> {
         }
         endTransaction();
     }
-
+    
+    public void sell(SaleDto dto, StringBuilder err) {
+        Sale s = new Sale();
+        Client c = clientFacade.findByIdentification(dto.getIdenNumClient());
+        if (c == null){
+            err.append("Cliente no encontrado");
+            return;
+        }
+        Employee em = employeeFacade.findByIdentification(dto.getIdenNumEmployee());
+        if (em == null){
+            err.append("Empleado no encontrado");
+            return;
+        }
+        
+        s.setCost(dto.getCost());
+        s.setIdClient(c);
+        s.setIdEmployee(em);
+        s.setIdOffice(em.getIdOffice());
+        s.setPaymentMethod(dto.getPaymentMethod());
+        s.setToken(dto.getToken());
+        
+        sell(s, err);
+    }
 }
