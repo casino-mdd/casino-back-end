@@ -35,6 +35,7 @@ public class ApplicationConfig extends Application {
         resources.add(mdd.casino.rest.entity.ExchangeRest.class);
         resources.add(mdd.casino.rest.entity.OfficeRest.class);
         resources.add(mdd.casino.rest.entity.PersonRest.class);
+        resources.add(mdd.casino.rest.entity.RewardRest.class);
         resources.add(mdd.casino.rest.entity.SaleRest.class);
         resources.add(mdd.casino.rest.entity.UserAccountRest.class);
     }

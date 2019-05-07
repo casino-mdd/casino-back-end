@@ -5,6 +5,8 @@
  */
 package mdd.casino.rest.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,7 +19,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import mdd.casino.jpa.entity.dto.ExchangeDto;
+import mdd.casino.jpa.entity.facade.ClientFacade;
 import mdd.casino.jpa.entity.facade.ExchangeFacade;
+import mdd.casino.jpa.entity.pojo.Client;
 import mdd.casino.jpa.entity.pojo.Exchange;
 import mdd.casino.util.BeanUtil;
 import mdd.casino.util.JsonUtil;
@@ -34,6 +38,7 @@ public class ExchangeRest extends AbstractRest<Exchange> {
     private UriInfo context;
 
     ExchangeFacade facade = BeanUtil.lookupFacadeBean(ExchangeFacade.class);
+    ClientFacade clientFacade = BeanUtil.lookupFacadeBean(ClientFacade.class);
 
     public ExchangeRest() {
         super(Exchange.class);
@@ -43,16 +48,15 @@ public class ExchangeRest extends AbstractRest<Exchange> {
     public ExchangeFacade getFacade() {
         return facade;
     }
-            
+
     @POST
     @Path("/exchangeReward")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String obj_json) {
-        
+
         ExchangeDto dto = JsonUtil.jsonToObject(obj_json, ExchangeDto.class);
-        
-        
+
         StringBuilder err = new StringBuilder();
         facade.exchangeReward(dto, err);
 
@@ -91,6 +95,46 @@ public class ExchangeRest extends AbstractRest<Exchange> {
         obj.setCreatedAt(objOld.getCreatedAt());
 
         return updateDefault(obj);
+    }
+
+    @GET
+    @Path("listdto")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listDto() {
+        List<Exchange> lst = facade.findAll();
+        List<ExchangeDto> lstDto = new ArrayList<>();
+        for (Exchange exchange : lst) {
+            ExchangeDto dtop = parse(exchange);
+            lstDto.add(dtop);
+        }
+        return JsonUtil.objectToJson(lstDto);
+    }
+
+    @GET
+    @Path("finddto/{identificationNumClient}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String findDtoByClient(@PathParam("identificationNumClient") String identificationNumClient) {
+        Client c = clientFacade.findByIdentification(identificationNumClient);
+        if (c == null) {
+            return "{ \"error\": \"Cliente no encontrado!\" }";
+        }
+        List<Exchange> lst = facade.listByIdClient(c.getIdClient());
+        List<ExchangeDto> lstDto = new ArrayList<>();
+        for (Exchange exchange : lst) {
+            ExchangeDto dtop = parse(exchange);
+            lstDto.add(dtop);
+        }
+        return JsonUtil.objectToJson(lstDto);
+    }
+
+    private ExchangeDto parse(Exchange e) {
+        ExchangeDto dto = new ExchangeDto();
+        dto.setClient(e.getIdClient().getIdPerson().getName() + " " + e.getIdClient().getIdPerson().getSurname());
+        dto.setDate(e.getCreatedAt());
+        dto.setEmployee(e.getIdEmployee().getIdPerson().getName() + " " + e.getIdEmployee().getIdPerson().getSurname());
+        dto.setIdenNumClient(e.getIdClient().getIdPerson().getIdentificationNumber());
+        dto.setIdenNumEmployee(e.getIdEmployee().getIdPerson().getIdentificationNumber());
+        return dto;
     }
 
 }

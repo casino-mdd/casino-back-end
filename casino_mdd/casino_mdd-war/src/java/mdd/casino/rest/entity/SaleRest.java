@@ -5,6 +5,9 @@
  */
 package mdd.casino.rest.entity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,7 +20,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import mdd.casino.jpa.entity.dto.SaleDto;
+import mdd.casino.jpa.entity.facade.ClientFacade;
+import mdd.casino.jpa.entity.facade.PointFacade;
 import mdd.casino.jpa.entity.facade.SaleFacade;
+import mdd.casino.jpa.entity.pojo.Client;
+import mdd.casino.jpa.entity.pojo.Exchange;
 import mdd.casino.jpa.entity.pojo.Sale;
 import mdd.casino.util.BeanUtil;
 import mdd.casino.util.JsonUtil;
@@ -34,6 +41,8 @@ public class SaleRest extends AbstractRest<Sale> {
     private UriInfo context;
 
     SaleFacade facade = BeanUtil.lookupFacadeBean(SaleFacade.class);
+    PointFacade pointFacade = BeanUtil.lookupFacadeBean(PointFacade.class);
+    ClientFacade clientFacade = BeanUtil.lookupFacadeBean(ClientFacade.class);
 
     public SaleRest() {
         super(Sale.class);
@@ -88,6 +97,59 @@ public class SaleRest extends AbstractRest<Sale> {
         obj.setCreatedAt(objOld.getCreatedAt());
 
         return updateDefault(obj);
+    }
+
+    @GET
+    @Path("listdto")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listDto() {
+        List<Sale> lst = facade.findAll();
+        List<SaleDto> lstDto = new ArrayList<>();
+
+        HashMap<Integer, Long> mapPointsByIdClient = pointFacade.mapPointsByIdClient();
+
+        for (Sale s : lst) {
+            SaleDto dtop = parse(s, mapPointsByIdClient);
+            lstDto.add(dtop);
+        }
+        return JsonUtil.objectToJson(lstDto);
+    }
+
+    @GET
+    @Path("finddto/{identificationNumClient}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String findDto(@PathParam("identificationNumClient") String identificationNumClient) {
+        Client c = clientFacade.findByIdentification(identificationNumClient);
+        if (c == null) {
+            return "{ \"error\": \"Cliente no encontrado!\" }";
+        }
+        List<Sale> lst = facade.listByIdClient(c.getIdClient());
+        List<SaleDto> lstDto = new ArrayList<>();
+
+        HashMap<Integer, Long> mapPointsByIdClient = pointFacade.mapPointsByIdClient();
+
+        for (Sale s : lst) {
+            SaleDto dtop = parse(s, mapPointsByIdClient);
+            lstDto.add(dtop);
+        }
+        return JsonUtil.objectToJson(lstDto);
+    }
+
+    private SaleDto parse(Sale s, HashMap<Integer, Long> mapPointsByIdClient) {
+        SaleDto dto = new SaleDto();
+        dto.setClient(s.getIdClient().getIdPerson().getName() + " " + s.getIdClient().getIdPerson().getSurname());
+        dto.setCost(s.getCost());
+        dto.setEmployee(s.getIdEmployee().getIdPerson().getName() + " " + s.getIdEmployee().getIdPerson().getSurname());
+        dto.setIdenNumClient(s.getIdClient().getIdPerson().getIdentificationNumber());
+        dto.setIdenNumEmployee(s.getIdEmployee().getIdPerson().getIdentificationNumber());
+        dto.setPaymentMethod(s.getPaymentMethod());
+
+        long points = (mapPointsByIdClient.get(s.getIdClient().getIdClient()) == null) ? 0 : mapPointsByIdClient.get(s.getIdClient().getIdClient());
+        dto.setPoints((int) points);
+
+        dto.setToken(s.getToken());
+
+        return dto;
     }
 
 }

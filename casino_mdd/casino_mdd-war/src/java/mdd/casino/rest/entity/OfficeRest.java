@@ -5,7 +5,10 @@
  */
 package mdd.casino.rest.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,10 +20,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import mdd.casino.jpa.entity.facade.ClientFacade;
+import mdd.casino.jpa.entity.dto.OfficeDto;
+import mdd.casino.jpa.entity.dto.RewardDto;
 import mdd.casino.jpa.entity.facade.OfficeFacade;
-import mdd.casino.jpa.entity.pojo.Client;
+import mdd.casino.jpa.entity.facade.RewardFacade;
 import mdd.casino.jpa.entity.pojo.Office;
+import mdd.casino.jpa.entity.pojo.Reward;
 import mdd.casino.util.BeanUtil;
 import mdd.casino.util.JsonUtil;
 
@@ -36,6 +41,7 @@ public class OfficeRest extends AbstractRest<Office> {
     private UriInfo context;
 
     OfficeFacade facade = BeanUtil.lookupFacadeBean(OfficeFacade.class);
+    RewardFacade rewardFacade = BeanUtil.lookupFacadeBean(RewardFacade.class);
 
     public OfficeRest() {
         super(Office.class);
@@ -66,6 +72,22 @@ public class OfficeRest extends AbstractRest<Office> {
     }
 
     @GET
+    @Path("listdto")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listDto() {
+        List<Office> lst = facade.findAll();
+        List<OfficeDto> lstDto = new ArrayList<>();
+
+        HashMap<Integer, List<Reward>> mapRewardByOffice = rewardFacade.mapRewardByOffice();
+
+        for (Office o : lst) {
+            OfficeDto dtop = parse(o, mapRewardByOffice);
+            lstDto.add(dtop);
+        }
+        return JsonUtil.objectToJson(lstDto);
+    }
+
+    @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") String id) {
@@ -84,6 +106,26 @@ public class OfficeRest extends AbstractRest<Office> {
         obj.setUpdatedAt(new Date());
 
         return updateDefault(obj);
+    }
+
+    private OfficeDto parse(Office o, HashMap<Integer, List<Reward>> mapRewardByOffice) {
+        OfficeDto dto = new OfficeDto();
+        dto.setAddress(o.getAddress());
+        dto.setCity(o.getCity());
+        dto.setIdOffice(o.getIdOffice());
+        dto.setName(o.getName());
+
+        List<Reward> lstR = mapRewardByOffice.get(o.getIdOffice());
+        if (lstR != null) {
+            List<RewardDto> lstRDto = new ArrayList<>();
+            for (Reward reward : lstR) {
+                RewardDto dtoR = RewardFacade.parse(reward);
+                lstRDto.add(dtoR);
+            }
+            dto.setRewards(lstRDto);
+        }
+
+        return dto;
     }
 
 }
