@@ -109,6 +109,9 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
     @Produces(MediaType.APPLICATION_JSON)
     public String findByUsername(@PathParam("username") String username) {
         UserAccount u = facade.findByUsername(username);
+        if(u==null){
+            return "{\"username\":\"Usuario no encontrado\"}";
+        }
         UserAccountDto dto = parseUserAccount(u);
         return JsonUtil.objectToJson(dto);
     }

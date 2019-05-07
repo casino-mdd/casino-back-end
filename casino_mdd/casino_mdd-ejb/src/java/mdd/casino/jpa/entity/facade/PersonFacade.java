@@ -29,4 +29,18 @@ public class PersonFacade extends AbstractFacade<Person> {
         super(Person.class);
     }
 
+    public Person findByEmail(String email) {
+        String hql = "SELECT p "
+                + "  FROM Person p "
+                + " WHERE p.email='" + email + "'";
+        return objectFromHQL(hql);
+    }
+
+     public Person findByIdentificacioin(String identificationNum) {
+        String hql = "SELECT p "
+                + "  FROM Person p "
+                + " WHERE p.identificationNumber='" + identificationNum + "'";
+        return objectFromHQL(hql);
+    }
+
 }
