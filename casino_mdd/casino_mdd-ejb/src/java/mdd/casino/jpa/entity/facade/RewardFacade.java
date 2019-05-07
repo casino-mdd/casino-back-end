@@ -36,7 +36,7 @@ public class RewardFacade extends AbstractFacade<Reward> {
     }
 
     public List<Reward> listByOffice(Integer idOffice) {
-        String hql = "SELECT r FROM Reward r WHERE r.idOffice.idOffice = " + idOffice + " order by r.pointNeed desc";
+        String hql = "SELECT r FROM Reward r WHERE r.idOffice.idOffice = " + idOffice + " order by r.pointsNeed desc";
         return findList(hql);
     }
 
