@@ -12,7 +12,7 @@ import java.util.Date;
  * @author dagofonseca
  */
 public class ClientDto {
-    
+
     private Integer idClient;
     private Date createdDate;
     private int age;
@@ -22,6 +22,8 @@ public class ClientDto {
     private String phone;
     private String identificationNumber;
 
+    private String surname;
+
     public Integer getIdClient() {
         return idClient;
     }
@@ -30,7 +32,6 @@ public class ClientDto {
         this.idClient = idClient;
     }
 
-    
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -86,6 +87,13 @@ public class ClientDto {
     public void setIdentificationNumber(String identificationNumber) {
         this.identificationNumber = identificationNumber;
     }
-     
-        
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
 }

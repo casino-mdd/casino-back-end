@@ -12,7 +12,7 @@ import java.util.Date;
  * @author dagofonseca
  */
 public class EmployeeDto {
-    
+
     private Integer idEmployee;
     private String position;
     private String name;
@@ -21,6 +21,11 @@ public class EmployeeDto {
     private String identificationNumber;
     private String office;
     private Date admissionDate;
+
+    private Integer idOffice;
+    private int age;
+    private String gender;
+    private String surname;
 
     public Integer getIdEmployee() {
         return idEmployee;
@@ -85,7 +90,37 @@ public class EmployeeDto {
     public void setAdmissionDate(Date admissionDate) {
         this.admissionDate = admissionDate;
     }
-    
-        
-    
+
+    public Integer getIdOffice() {
+        return idOffice;
+    }
+
+    public void setIdOffice(Integer idOffice) {
+        this.idOffice = idOffice;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
 }
