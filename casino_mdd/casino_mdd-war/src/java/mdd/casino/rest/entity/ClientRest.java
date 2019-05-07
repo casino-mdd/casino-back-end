@@ -58,7 +58,8 @@ public class ClientRest extends AbstractRest<Client> {
     public ClientFacade getFacade() {
         return facade;
     }
-    private ClientDto parseClient(Client c){
+
+    private ClientDto parseClient(Client c) {
         ClientDto dto = new ClientDto();
         dto.setAge(c.getIdPerson().getAge());
         dto.setCreatedDate(c.getCreatedAt());
@@ -66,22 +67,22 @@ public class ClientRest extends AbstractRest<Client> {
         dto.setGender(c.getIdPerson().getGender());
         dto.setIdClient(c.getIdClient());
         dto.setIdentificationNumber(c.getIdPerson().getIdentificationNumber());
-        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname() );
-        dto.setPhone(c.getIdPerson().getPhone()+"");
-        
+        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname());
+        dto.setPhone(c.getIdPerson().getPhone() + "");
+
         return dto;
     }
-    
-    private ClientPointDto parseClientPoint(Client c, List<Point> lstP, List<Reward> lstR){
+
+    private ClientPointDto parseClientPoint(Client c, List<Point> lstP, List<Reward> lstR) {
         ClientPointDto dto = new ClientPointDto();
         dto.setAge(c.getIdPerson().getAge());
         dto.setCreatedDate(c.getCreatedAt());
         dto.setGender(c.getIdPerson().getGender());
         dto.setEmail(c.getIdPerson().getEmail());
         dto.setIdentificationNumber(c.getIdPerson().getIdentificationNumber());
-        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname() );
-        dto.setPhone(c.getIdPerson().getPhone()+"");
-        
+        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname());
+        dto.setPhone(c.getIdPerson().getPhone() + "");
+
         for (Reward r : lstR) {
             RewardDto rdto = new RewardDto();
             rdto.setIdReward(r.getIdReward());
@@ -95,10 +96,10 @@ public class ClientRest extends AbstractRest<Client> {
             pdto.setPoints(p.getTotalPoints());
             dto.getPoints().add(pdto);
         }
-        
+
         return dto;
     }
-    
+
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -109,6 +110,26 @@ public class ClientRest extends AbstractRest<Client> {
         obj.setUpdatedAt(new Date());
 
         return createDefault(obj);
+    }
+
+    @POST
+    @Path("/createdto")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDtop(String obj_json) {
+        ClientDto obj = JsonUtil.jsonToObject(obj_json, ClientDto.class);
+
+        StringBuilder err = new StringBuilder();
+        Client c = facade.createDto(obj, err);
+        String json;
+        if (!err.toString().isEmpty()) {
+            json = "{ \"error\": \"" + err.toString() + "\" }";
+        } else {
+            obj = parseClient(c);
+            json = JsonUtil.objectToJson(obj);
+        }
+
+        return Response.status(200).entity(json).build();
     }
 
     @GET
@@ -125,47 +146,47 @@ public class ClientRest extends AbstractRest<Client> {
         List<Client> lstOri = facade.findAll();
         List<ClientDto> lstDto = new ArrayList();
         for (Client c : lstOri) {
-            ClientDto dto = parseClient(c);            
+            ClientDto dto = parseClient(c);
             lstDto.add(dto);
         }
         return JsonUtil.objectToJson(lstDto);
     }
-       
+
     @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") String id) {
         return findDefault(new Integer(id));
     }
-    
+
     @GET
     @Path("finddto/{identificationNumber}")
     @Produces(MediaType.APPLICATION_JSON)
     public String findDto(@PathParam("identificationNumber") String identificationNumber) {
         Client c = facade.findByIdentification(identificationNumber);
-        if (c == null){
+        if (c == null) {
             return "{ \"error\": \"Número de identificación no está registrado\" }";
         }
         ClientDto dto = parseClient(c);
         return JsonUtil.objectToJson(dto);
     }
-    
+
     @GET
     @Path("clientpoints/{clientIdentification}/{employeeIdentification}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("clientIdentification") String clientIdentification,
             @PathParam("employeeIdentification") String employeeIdentification) {
-        Client c =facade.findByIdentification(clientIdentification);
+        Client c = facade.findByIdentification(clientIdentification);
         Employee e = empFacade.findByIdentification(employeeIdentification);
-        if (c == null || e == null){
+        if (c == null || e == null) {
             return "{ \"error\": \"Número de identificación no está registrado\" }";
         }
         List<Reward> lstR = rewFacade.listByOffice(e.getIdOffice().getIdOffice());
         List<Point> lstP = pointFacade.listPointsAviable(c.getIdClient());
         ClientPointDto dto = parseClientPoint(c, lstP, lstR);
-        
+
         return JsonUtil.objectToJson(dto);
-        
+
     }
 
     @PUT
