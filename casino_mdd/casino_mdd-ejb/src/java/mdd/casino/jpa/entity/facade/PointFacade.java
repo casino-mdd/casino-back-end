@@ -47,7 +47,7 @@ public class PointFacade extends AbstractFacade<Point> {
      * @return Map<key: idsale, val: sumPoints>
      */
     public HashMap<Integer, Point> mapPointsByIdSale() {
-       List<Point> lstS=findAll();
+       List<Point> lstS = findAll();
        HashMap<Integer, Point> map=new HashMap<>();
         for (Point point : lstS) {
             map.put(point.getIdSale().getIdSale(), point);

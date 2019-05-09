@@ -5,6 +5,7 @@
  */
 package mdd.casino.rest.entity;
 
+import com.sun.org.apache.xml.internal.utils.SystemIDResolver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,8 +108,9 @@ public class SaleRest extends AbstractRest<Sale> {
         List<SaleDto> lstDto = new ArrayList<>();
 
         HashMap<Integer, Point> mapPointsByIdSale = pointFacade.mapPointsByIdSale();
-
-        for (Sale s : lst) {
+        Point p = mapPointsByIdSale.get(new Integer(33));
+        
+        for (Sale s : lst) {            
             SaleDto dtop = facade.parse(s, mapPointsByIdSale.get(s.getIdSale()));
             lstDto.add(dtop);
         }

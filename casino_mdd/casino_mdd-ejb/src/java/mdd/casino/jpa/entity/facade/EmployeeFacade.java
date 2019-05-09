@@ -106,6 +106,7 @@ public class EmployeeFacade extends AbstractFacade<Employee> {
         dto.setOffice(c.getIdOffice().getName());
         dto.setPhone(c.getIdPerson().getPhone() + "");
         dto.setPosition(c.getPosition());
+        dto.setAge(c.getIdPerson().getAge());
 
         return dto;
     }
