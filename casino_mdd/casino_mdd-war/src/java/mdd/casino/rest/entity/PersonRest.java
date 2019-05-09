@@ -91,18 +91,4 @@ public class PersonRest extends AbstractRest<Person> {
         return updateDefault(obj);
     }
 
-    /*@PUT
-    @Path("/prueba2/{param}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response putMsg(@PathParam("param") String msg, String obj_json) {
-        String output = "PUT: Jersey say : " + msg + obj_json;
-        return Response.status(200).entity(output).build();
-    }
-
-    @DELETE
-    @Path("/delete/{param}")
-    public Response deleteMsg(@PathParam("param") String msg) {
-        String output = "DELETE:Jersey say : " + msg;
-        return Response.status(200).entity(output).build();
-    }*/
 }

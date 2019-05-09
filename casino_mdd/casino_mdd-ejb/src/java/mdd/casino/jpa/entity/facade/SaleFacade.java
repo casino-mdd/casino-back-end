@@ -6,6 +6,7 @@
 package mdd.casino.jpa.entity.facade;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -95,5 +96,22 @@ public class SaleFacade extends AbstractFacade<Sale> {
     public List<Sale> listByIdClient(Integer idclient) {
         String hql = "SELECT s FROM Sale s WHERE s.idClient.idClient=" + idclient;
         return findList(hql);
+    }
+    
+    public SaleDto parse(Sale s, HashMap<Integer, Long> mapPointsByIdClient) {
+        SaleDto dto = new SaleDto();
+        dto.setClient(s.getIdClient().getIdPerson().getName() + " " + s.getIdClient().getIdPerson().getSurname());
+        dto.setCost(s.getCost());
+        dto.setEmployee(s.getIdEmployee().getIdPerson().getName() + " " + s.getIdEmployee().getIdPerson().getSurname());
+        dto.setIdenNumClient(s.getIdClient().getIdPerson().getIdentificationNumber());
+        dto.setIdenNumEmployee(s.getIdEmployee().getIdPerson().getIdentificationNumber());
+        dto.setPaymentMethod(s.getPaymentMethod());
+
+        long points = (mapPointsByIdClient.get(s.getIdClient().getIdClient()) == null) ? 0 : mapPointsByIdClient.get(s.getIdClient().getIdClient());
+        dto.setPoints((int) points);
+
+        dto.setToken(s.getToken());
+
+        return dto;
     }
 }
