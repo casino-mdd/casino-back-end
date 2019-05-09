@@ -65,6 +65,7 @@ public class UserAccountFacade extends AbstractFacade<UserAccount> {
         dto.setPosition(u.getIdEmployee().getPosition());
         dto.setUpdatedAt(u.getUpdatedAt());        
         dto.setStatus(status);
+        dto.setProfile(u.getProfile());
                
         return dto;
     }

@@ -20,6 +20,7 @@ public class UserAccountDto {
     private Date createdAt;
     private String status;
     private String position;
+    private String profile;
 
     public Integer getIdUserAccount() {
         return idUserAccount;
@@ -75,6 +76,14 @@ public class UserAccountDto {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
     
     
