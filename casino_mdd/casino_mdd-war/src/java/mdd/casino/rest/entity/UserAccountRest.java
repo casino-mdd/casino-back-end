@@ -78,24 +78,7 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
         }
 
         return Response.status(200).entity(json).build();
-    }
-
-    private UserAccountDto parseUserAccount(UserAccount u) {
-
-        String status = (u.getIsActive()) ? "Activo" : "Inactivo";
-        UserAccountDto dto = new UserAccountDto();
-
-        dto.setCreatedAt(u.getCreatedAt());
-        dto.setUsername(u.getUsername());
-        dto.setIdUserAccount(u.getIdUserAccount());
-        dto.setPassword(u.getPassword());
-        dto.setPosition(u.getIdEmployee().getPosition());
-        dto.setUpdatedAt(u.getUpdatedAt());
-        dto.setStatus(status);
-        dto.setProfile(u.getProfile());
-
-        return dto;
-    }
+    }   
 
     @GET
     @Path("list")
@@ -111,7 +94,7 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
         List<UserAccount> lstOri = facade.findAll();
         List<UserAccountDto> lstDto = new ArrayList();
         for (UserAccount c : lstOri) {
-            UserAccountDto dto = parseUserAccount(c);
+            UserAccountDto dto = facade.parseUserAccount(c);
             lstDto.add(dto);
         }
         return JsonUtil.objectToJson(lstDto);
@@ -132,7 +115,7 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
         if (u == null) {
             return "{\"username\":\"Usuario no encontrado\"}";
         }
-        UserAccountDto dto = parseUserAccount(u);
+        UserAccountDto dto = facade.parseUserAccount(u);
         return JsonUtil.objectToJson(dto);
     }
 

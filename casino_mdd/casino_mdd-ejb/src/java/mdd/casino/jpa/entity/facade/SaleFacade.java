@@ -96,4 +96,24 @@ public class SaleFacade extends AbstractFacade<Sale> {
         String hql = "SELECT s FROM Sale s WHERE s.idClient.idClient=" + idclient;
         return findList(hql);
     }
+    
+    public SaleDto parse(Sale s, Point p) {
+        SaleDto dto = new SaleDto();
+        dto.setClient(s.getIdClient().getIdPerson().getName() + " " + s.getIdClient().getIdPerson().getSurname());
+        dto.setCost(s.getCost());
+        dto.setEmployee(s.getIdEmployee().getIdPerson().getName() + " " + s.getIdEmployee().getIdPerson().getSurname());
+        dto.setIdenNumClient(s.getIdClient().getIdPerson().getIdentificationNumber());
+        dto.setIdenNumEmployee(s.getIdEmployee().getIdPerson().getIdentificationNumber());
+        dto.setPaymentMethod(s.getPaymentMethod());
+
+        int points = 0;
+        if (p != null) {
+            points = p.getTotalPoints();
+        }
+        dto.setPoints(points);
+
+        dto.setToken(s.getToken());
+
+        return dto;
+    }
 }

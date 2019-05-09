@@ -131,5 +131,21 @@ public class UserAccountFacade extends AbstractFacade<UserAccount> {
         }
 
     }
+    
+    public UserAccountDto parseUserAccount(UserAccount u) {
 
+        String status = (u.getIsActive()) ? "Activo" : "Inactivo";
+        UserAccountDto dto = new UserAccountDto();
+
+        dto.setCreatedAt(u.getCreatedAt());
+        dto.setUsername(u.getUsername());
+        dto.setIdUserAccount(u.getIdUserAccount());
+        dto.setPassword(u.getPassword());
+        dto.setPosition(u.getIdEmployee().getPosition());
+        dto.setUpdatedAt(u.getUpdatedAt());
+        dto.setStatus(status);
+        dto.setProfile(u.getProfile());
+
+        return dto;
+    }
 }

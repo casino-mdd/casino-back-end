@@ -81,7 +81,7 @@ public class OfficeRest extends AbstractRest<Office> {
         HashMap<Integer, List<Reward>> mapRewardByOffice = rewardFacade.mapRewardByOffice();
 
         for (Office o : lst) {
-            OfficeDto dtop = parse(o, mapRewardByOffice);
+            OfficeDto dtop = facade.parse(o, mapRewardByOffice);
             lstDto.add(dtop);
         }
         return JsonUtil.objectToJson(lstDto);
@@ -106,26 +106,6 @@ public class OfficeRest extends AbstractRest<Office> {
         obj.setUpdatedAt(new Date());
 
         return updateDefault(obj);
-    }
-
-    private OfficeDto parse(Office o, HashMap<Integer, List<Reward>> mapRewardByOffice) {
-        OfficeDto dto = new OfficeDto();
-        dto.setAddress(o.getAddress());
-        dto.setCity(o.getCity());
-        dto.setIdOffice(o.getIdOffice());
-        dto.setName(o.getName());
-
-        List<Reward> lstR = mapRewardByOffice.get(o.getIdOffice());
-        if (lstR != null) {
-            List<RewardDto> lstRDto = new ArrayList<>();
-            for (Reward reward : lstR) {
-                RewardDto dtoR = RewardFacade.parse(reward);
-                lstRDto.add(dtoR);
-            }
-            dto.setRewards(lstRDto);
-        }
-
-        return dto;
-    }
+    }   
 
 }

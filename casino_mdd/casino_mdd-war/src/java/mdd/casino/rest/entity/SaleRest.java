@@ -109,7 +109,7 @@ public class SaleRest extends AbstractRest<Sale> {
         HashMap<Integer, Point> mapPointsByIdSale = pointFacade.mapPointsByIdSale();
 
         for (Sale s : lst) {
-            SaleDto dtop = parse(s, mapPointsByIdSale.get(s.getIdSale()));
+            SaleDto dtop = facade.parse(s, mapPointsByIdSale.get(s.getIdSale()));
             lstDto.add(dtop);
         }
         return JsonUtil.objectToJson(lstDto);
@@ -129,30 +129,11 @@ public class SaleRest extends AbstractRest<Sale> {
         HashMap<Integer, Point> mapPointsByIdSale = pointFacade.mapPointsByIdSale();
 
         for (Sale s : lst) {
-            SaleDto dtop = parse(s, mapPointsByIdSale.get(s.getIdSale()));
+            SaleDto dtop = facade.parse(s, mapPointsByIdSale.get(s.getIdSale()));
             lstDto.add(dtop);
         }
+       
         return JsonUtil.objectToJson(lstDto);
-    }
-
-    private SaleDto parse(Sale s, Point p) {
-        SaleDto dto = new SaleDto();
-        dto.setClient(s.getIdClient().getIdPerson().getName() + " " + s.getIdClient().getIdPerson().getSurname());
-        dto.setCost(s.getCost());
-        dto.setEmployee(s.getIdEmployee().getIdPerson().getName() + " " + s.getIdEmployee().getIdPerson().getSurname());
-        dto.setIdenNumClient(s.getIdClient().getIdPerson().getIdentificationNumber());
-        dto.setIdenNumEmployee(s.getIdEmployee().getIdPerson().getIdentificationNumber());
-        dto.setPaymentMethod(s.getPaymentMethod());
-
-        int points = 0;
-        if (p != null) {
-            points = p.getTotalPoints();
-        }
-        dto.setPoints(points);
-
-        dto.setToken(s.getToken());
-
-        return dto;
     }
 
 }
