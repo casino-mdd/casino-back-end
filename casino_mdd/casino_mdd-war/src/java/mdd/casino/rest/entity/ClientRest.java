@@ -58,48 +58,7 @@ public class ClientRest extends AbstractRest<Client> {
     public ClientFacade getFacade() {
         return facade;
     }
-
-    private ClientDto parseClient(Client c) {
-        ClientDto dto = new ClientDto();
-        dto.setAge(c.getIdPerson().getAge());
-        dto.setCreatedDate(c.getCreatedAt());
-        dto.setEmail(c.getIdPerson().getEmail());
-        dto.setGender(c.getIdPerson().getGender());
-        dto.setIdClient(c.getIdClient());
-        dto.setIdentificationNumber(c.getIdPerson().getIdentificationNumber());
-        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname());
-        dto.setPhone(c.getIdPerson().getPhone() + "");
-
-        return dto;
-    }
-
-    private ClientPointDto parseClientPoint(Client c, List<Point> lstP, List<Reward> lstR) {
-        ClientPointDto dto = new ClientPointDto();
-        dto.setAge(c.getIdPerson().getAge());
-        dto.setCreatedDate(c.getCreatedAt());
-        dto.setGender(c.getIdPerson().getGender());
-        dto.setEmail(c.getIdPerson().getEmail());
-        dto.setIdentificationNumber(c.getIdPerson().getIdentificationNumber());
-        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname());
-        dto.setPhone(c.getIdPerson().getPhone() + "");
-
-        for (Reward r : lstR) {
-            RewardDto rdto = new RewardDto();
-            rdto.setIdReward(r.getIdReward());
-            rdto.setName(r.getName());
-            rdto.setPointsNeed(r.getPointsNeed());
-            dto.getRewards().add(rdto);
-        }
-        for (Point p : lstP) {
-            PointDto pdto = new PointDto();
-            pdto.setExp_date(p.getExpDate());
-            pdto.setPoints(p.getTotalPoints());
-            dto.getPoints().add(pdto);
-        }
-
-        return dto;
-    }
-
+    
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -125,7 +84,7 @@ public class ClientRest extends AbstractRest<Client> {
         if (!err.toString().isEmpty()) {
             json = "{ \"error\": \"" + err.toString() + "\" }";
         } else {
-            obj = parseClient(c);
+            obj = facade.parseClient(c);
             json = JsonUtil.objectToJson(obj);
         }
 
@@ -146,7 +105,7 @@ public class ClientRest extends AbstractRest<Client> {
         List<Client> lstOri = facade.findAll();
         List<ClientDto> lstDto = new ArrayList();
         for (Client c : lstOri) {
-            ClientDto dto = parseClient(c);
+            ClientDto dto = facade.parseClient(c);
             lstDto.add(dto);
         }
         return JsonUtil.objectToJson(lstDto);
@@ -167,7 +126,7 @@ public class ClientRest extends AbstractRest<Client> {
         if (c == null) {
             return "{ \"error\": \"Número de identificación no está registrado\" }";
         }
-        ClientDto dto = parseClient(c);
+        ClientDto dto = facade.parseClient(c);
         return JsonUtil.objectToJson(dto);
     }
 
@@ -183,7 +142,7 @@ public class ClientRest extends AbstractRest<Client> {
         }
         List<Reward> lstR = rewFacade.listByOffice(e.getIdOffice().getIdOffice());
         List<Point> lstP = pointFacade.listPointsAviable(c.getIdClient());
-        ClientPointDto dto = parseClientPoint(c, lstP, lstR);
+        ClientPointDto dto = facade.parseClientPoint(c, lstP, lstR);
 
         return JsonUtil.objectToJson(dto);
 
