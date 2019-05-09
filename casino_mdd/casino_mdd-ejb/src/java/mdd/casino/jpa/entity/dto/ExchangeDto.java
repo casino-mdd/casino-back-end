@@ -20,6 +20,7 @@ public class ExchangeDto {
     private String reward;
     private String employee;
     private Date date;
+    private String nameReward;
 
     public String getIdenNumClient() {
         return idenNumClient;
@@ -76,5 +77,14 @@ public class ExchangeDto {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public String getNameReward() {
+        return nameReward;
+    }
+
+    public void setNameReward(String nameReward) {
+        this.nameReward = nameReward;
+    }
+    
 
 }

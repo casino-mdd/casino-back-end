@@ -117,6 +117,7 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
         dto.setEmployee(e.getIdEmployee().getIdPerson().getName() + " " + e.getIdEmployee().getIdPerson().getSurname());
         dto.setIdenNumClient(e.getIdClient().getIdPerson().getIdentificationNumber());
         dto.setIdenNumEmployee(e.getIdEmployee().getIdPerson().getIdentificationNumber());
+        dto.setNameReward(e.getIdReward().getName());
         return dto;
     }
 }
