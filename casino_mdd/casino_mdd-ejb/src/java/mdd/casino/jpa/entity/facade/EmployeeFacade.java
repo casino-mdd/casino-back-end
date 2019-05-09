@@ -93,6 +93,19 @@ public class EmployeeFacade extends AbstractFacade<Employee> {
         }
 
         return e;
+    }
+        
+    public EmployeeDto parseEmployee(Employee c) {
+        EmployeeDto dto = new EmployeeDto();
+        dto.setAdmissionDate(c.getAdmitionDate());
+        dto.setEmail(c.getIdPerson().getEmail());
+        dto.setIdEmployee(c.getIdEmployee());
+        dto.setIdentificationNumber(c.getIdPerson().getIdentificationNumber());
+        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname());
+        dto.setOffice(c.getIdOffice().getName());
+        dto.setPhone(c.getIdPerson().getPhone() + "");
+        dto.setPosition(c.getPosition());
 
+        return dto;
     }
 }
