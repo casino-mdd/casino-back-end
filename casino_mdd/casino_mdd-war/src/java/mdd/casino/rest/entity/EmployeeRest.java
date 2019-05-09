@@ -72,11 +72,25 @@ public class EmployeeRest extends AbstractRest<Employee> {
         if (!err.toString().isEmpty()) {
             json = "{ \"error\": \"" + err.toString() + "\" }";
         } else {
-            obj = employeeFacade.parseEmployee(e);
+            obj = parseEmployee(e);
             json = JsonUtil.objectToJson(obj);
         }
 
         return Response.status(200).entity(json).build();
+    }
+
+    private EmployeeDto parseEmployee(Employee c) {
+        EmployeeDto dto = new EmployeeDto();
+        dto.setAdmissionDate(c.getAdmitionDate());
+        dto.setEmail(c.getIdPerson().getEmail());
+        dto.setIdEmployee(c.getIdEmployee());
+        dto.setIdentificationNumber(c.getIdPerson().getIdentificationNumber());
+        dto.setName(c.getIdPerson().getName() + " " + c.getIdPerson().getSurname());
+        dto.setOffice(c.getIdOffice().getName());
+        dto.setPhone(c.getIdPerson().getPhone() + "");
+        dto.setPosition(c.getPosition());
+
+        return dto;
     }
 
     @GET
@@ -93,7 +107,7 @@ public class EmployeeRest extends AbstractRest<Employee> {
         List<Employee> lstOri = employeeFacade.findAll();
         List<EmployeeDto> lstDto = new ArrayList();
         for (Employee c : lstOri) {
-            EmployeeDto dto = employeeFacade.parseEmployee(c);
+            EmployeeDto dto = parseEmployee(c);
             lstDto.add(dto);
         }
         return JsonUtil.objectToJson(lstDto);
@@ -114,7 +128,7 @@ public class EmployeeRest extends AbstractRest<Employee> {
         if (c == null) {
             return "{ \"error\": \"Número de identificación no está registrado\" }";
         }
-        EmployeeDto dto = employeeFacade.parseEmployee(c);
+        EmployeeDto dto = parseEmployee(c);
         return JsonUtil.objectToJson(dto);
     }
 

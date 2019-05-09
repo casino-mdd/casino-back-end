@@ -12,7 +12,7 @@ import java.util.Date;
  * @author dagofonseca
  */
 public class UserAccountDto {
-    
+
     private Integer idUserAccount;
     private String username;
     private String password;
@@ -20,7 +20,17 @@ public class UserAccountDto {
     private Date createdAt;
     private String status;
     private String position;
+    
+
+    private String idtentificationNumEmpl;
     private String profile;
+    private String name;
+    private String surname;
+    private int age;
+    private String gender;
+    private String email;
+    private long phone;
+    private Integer idoffice;
 
     public Integer getIdUserAccount() {
         return idUserAccount;
@@ -78,6 +88,14 @@ public class UserAccountDto {
         this.position = position;
     }
 
+    public String getIdtentificationNumEmpl() {
+        return idtentificationNumEmpl;
+    }
+
+    public void setIdtentificationNumEmpl(String idtentificationNumEmpl) {
+        this.idtentificationNumEmpl = idtentificationNumEmpl;
+    }
+
     public String getProfile() {
         return profile;
     }
@@ -85,7 +103,61 @@ public class UserAccountDto {
     public void setProfile(String profile) {
         this.profile = profile;
     }
-    
-    
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public long getPhone() {
+        return phone;
+    }
+
+    public void setPhone(long phone) {
+        this.phone = phone;
+    }
+
+    public Integer getIdoffice() {
+        return idoffice;
+    }
+
+    public void setIdoffice(Integer idoffice) {
+        this.idoffice = idoffice;
+    }
+
 }

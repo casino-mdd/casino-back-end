@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import mdd.casino.jpa.entity.pojo.Point;
+import mdd.casino.jpa.entity.pojo.Sale;
 
 @Stateless
 public class PointFacade extends AbstractFacade<Point> {
@@ -43,21 +44,13 @@ public class PointFacade extends AbstractFacade<Point> {
 
     /**
      *
-     * @return Map<key: idclient, val: sumPoints>
+     * @return Map<key: idsale, val: sumPoints>
      */
-    public HashMap<Integer, Long> mapPointsByIdClient() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
-
-        String hql = "SELECT sum(p.totalPoints),p.idSale.idClient.idClient "
-                + "   FROM Point p "
-                + "     WHERE p.expDate >='" + format.format(now) + "'"
-                + " GROUP BY p.idSale.idClient.idClient";
-
-        HashMap<Integer, Long> map = new HashMap<>();
-        List<Object[]> lst = findGeneric(hql);
-        for (Object[] o : lst) {
-            map.put((Integer) o[1], (Long) o[0]);
+    public HashMap<Integer, Point> mapPointsByIdSale() {
+       List<Point> lstS=findAll();
+       HashMap<Integer, Point> map=new HashMap<>();
+        for (Point point : lstS) {
+            map.put(point.getIdSale().getIdSale(), point);
         }
         return map;
     }

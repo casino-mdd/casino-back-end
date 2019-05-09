@@ -85,6 +85,5 @@ public class ExchangeDto {
     public void setNameReward(String nameReward) {
         this.nameReward = nameReward;
     }
-    
 
 }
