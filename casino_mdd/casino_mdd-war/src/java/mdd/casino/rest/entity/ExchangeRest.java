@@ -104,7 +104,7 @@ public class ExchangeRest extends AbstractRest<Exchange> {
         List<Exchange> lst = facade.findAll();
         List<ExchangeDto> lstDto = new ArrayList<>();
         for (Exchange exchange : lst) {
-            ExchangeDto dtop = parse(exchange);
+            ExchangeDto dtop = facade.parse(exchange);
             lstDto.add(dtop);
         }
         return JsonUtil.objectToJson(lstDto);
@@ -121,20 +121,10 @@ public class ExchangeRest extends AbstractRest<Exchange> {
         List<Exchange> lst = facade.listByIdClient(c.getIdClient());
         List<ExchangeDto> lstDto = new ArrayList<>();
         for (Exchange exchange : lst) {
-            ExchangeDto dtop = parse(exchange);
+            ExchangeDto dtop = facade.parse(exchange);
             lstDto.add(dtop);
         }
         return JsonUtil.objectToJson(lstDto);
-    }
-
-    private ExchangeDto parse(Exchange e) {
-        ExchangeDto dto = new ExchangeDto();
-        dto.setClient(e.getIdClient().getIdPerson().getName() + " " + e.getIdClient().getIdPerson().getSurname());
-        dto.setDate(e.getCreatedAt());
-        dto.setEmployee(e.getIdEmployee().getIdPerson().getName() + " " + e.getIdEmployee().getIdPerson().getSurname());
-        dto.setIdenNumClient(e.getIdClient().getIdPerson().getIdentificationNumber());
-        dto.setIdenNumEmployee(e.getIdEmployee().getIdPerson().getIdentificationNumber());
-        return dto;
     }
 
 }
