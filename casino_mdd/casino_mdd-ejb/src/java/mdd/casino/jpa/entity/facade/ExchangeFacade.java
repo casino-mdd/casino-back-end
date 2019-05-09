@@ -71,7 +71,7 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
             sess.createSQLQuery(sql).executeUpdate();
 
             //3. Delete Points
-            sql = "DELETE FROM point "
+            sql = "UPDATE point SET is_active=false "
                     + " WHERE id_sale IN (SELECT id_sale "
                     + "                    FROM sale"
                     + "                   WHERE id_client=" + exchange.getIdClient().getIdClient() + ")";

@@ -21,25 +21,25 @@ import org.hibernate.impl.SessionImpl;
 
 @Stateless
 public class SaleFacade extends AbstractFacade<Sale> {
-
+    
     @EJB
     ClientFacade clientFacade;
-
+    
     @EJB
     EmployeeFacade employeeFacade;
-
+    
     @PersistenceUnit
     private EntityManagerFactory emf;
-
+    
     @Override
     protected EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-
+    
     public SaleFacade() {
         super(Sale.class);
     }
-
+    
     public void sell(Sale sale, StringBuilder err) {
         beginTransaction();
         SessionImpl sess = getSess();
@@ -52,14 +52,15 @@ public class SaleFacade extends AbstractFacade<Sale> {
             //2. Add points
             int nPoints = 10;
             int nDaysExpired = 2 * 30;
-
+            
             Point p = new Point();
             p.setTotalPoints(nPoints);
             p.setExpDate(new Date(new Date().getTime() + nDaysExpired * 24 * 60 * 60 * 1000));
             p.setCreatedAt(new Date());
             p.setIdSale(sale);
+            p.setIsActive(true);
             sess.save(p);
-
+            
             commitTransaction();
         } catch (Exception e) {
             e.printStackTrace();
@@ -68,7 +69,7 @@ public class SaleFacade extends AbstractFacade<Sale> {
         }
         endTransaction();
     }
-
+    
     public void sell(SaleDto dto, StringBuilder err) {
         Sale s = new Sale();
         Client c = clientFacade.findByIdentification(dto.getIdenNumClient());
@@ -81,17 +82,17 @@ public class SaleFacade extends AbstractFacade<Sale> {
             err.append("Empleado no encontrado");
             return;
         }
-
+        
         s.setCost(dto.getCost());
         s.setIdClient(c);
         s.setIdEmployee(em);
         s.setIdOffice(em.getIdOffice());
         s.setPaymentMethod(dto.getPaymentMethod());
         s.setToken(dto.getToken());
-
+        
         sell(s, err);
     }
-
+    
     public List<Sale> listByIdClient(Integer idclient) {
         String hql = "SELECT s FROM Sale s WHERE s.idClient.idClient=" + idclient;
         return findList(hql);
@@ -105,15 +106,15 @@ public class SaleFacade extends AbstractFacade<Sale> {
         dto.setIdenNumClient(s.getIdClient().getIdPerson().getIdentificationNumber());
         dto.setIdenNumEmployee(s.getIdEmployee().getIdPerson().getIdentificationNumber());
         dto.setPaymentMethod(s.getPaymentMethod());
-
+        
         int points = 0;
         if (p != null) {
             points = p.getTotalPoints();
         }
         dto.setPoints(points);
-
+        
         dto.setToken(s.getToken());
-
+        
         return dto;
     }
 }

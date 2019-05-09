@@ -14,7 +14,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import mdd.casino.jpa.entity.pojo.Point;
-import mdd.casino.jpa.entity.pojo.Sale;
 
 @Stateless
 public class PointFacade extends AbstractFacade<Point> {
@@ -38,7 +37,8 @@ public class PointFacade extends AbstractFacade<Point> {
         String hql = "SELECT sum(p.totalPoints) "
                 + "   FROM Point p "
                 + "  WHERE p.idSale.idClient.idClient=" + idclient
-                + "     AND p.expDate >='" + format.format(now) + "'";
+                + "     AND p.expDate >='" + format.format(now) + "'"
+                + "     AND p.isActive=true";
         return numFromHQL(hql, new Long(0)).intValue();
     }
 

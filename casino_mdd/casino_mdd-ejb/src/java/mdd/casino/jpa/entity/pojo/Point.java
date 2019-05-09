@@ -61,6 +61,9 @@ public class Point implements Serializable {
     @JoinColumn(name = "id_sale", referencedColumnName = "id_sale")
     @ManyToOne(optional = false)
     private Sale idSale;
+    @NotNull
+    @Column(name = "is_active")
+    private boolean isActive;
 
     public Point() {
     }
@@ -116,6 +119,14 @@ public class Point implements Serializable {
         this.idSale = idSale;
     }
 
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -140,5 +151,5 @@ public class Point implements Serializable {
     public String toString() {
         return "mdd.casino.jpa.entity.pojo.Point[ idPoint=" + idPoint + " ]";
     }
-    
+
 }
