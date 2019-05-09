@@ -5,7 +5,6 @@
  */
 package mdd.casino.rest.entity;
 
-import com.sun.org.apache.xml.internal.utils.SystemIDResolver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
