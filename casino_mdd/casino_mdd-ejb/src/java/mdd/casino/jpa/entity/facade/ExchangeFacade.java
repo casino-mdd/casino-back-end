@@ -108,7 +108,7 @@ public class ExchangeFacade extends AbstractFacade<Exchange> {
     public List<Exchange> listByIdClient(Integer idclient) {
         String hql = "SELECT e FROM Exchange e WHERE e.idClient.idClient=" + idclient;
         return findList(hql);
-    }
+    }    
     
     public ExchangeDto parse(Exchange e) {
         ExchangeDto dto = new ExchangeDto();

@@ -24,7 +24,7 @@ import mdd.casino.jpa.entity.facade.ClientFacade;
 import mdd.casino.jpa.entity.facade.PointFacade;
 import mdd.casino.jpa.entity.facade.SaleFacade;
 import mdd.casino.jpa.entity.pojo.Client;
-import mdd.casino.jpa.entity.pojo.Exchange;
+import mdd.casino.jpa.entity.pojo.Point;
 import mdd.casino.jpa.entity.pojo.Sale;
 import mdd.casino.util.BeanUtil;
 import mdd.casino.util.JsonUtil;
@@ -106,10 +106,10 @@ public class SaleRest extends AbstractRest<Sale> {
         List<Sale> lst = facade.findAll();
         List<SaleDto> lstDto = new ArrayList<>();
 
-        HashMap<Integer, Long> mapPointsByIdClient = pointFacade.mapPointsByIdClient();
+        HashMap<Integer, Point> mapPointsByIdSale = pointFacade.mapPointsByIdSale();
 
         for (Sale s : lst) {
-            SaleDto dtop = facade.parse(s, mapPointsByIdClient);
+            SaleDto dtop = facade.parse(s, mapPointsByIdSale.get(s.getIdSale()));
             lstDto.add(dtop);
         }
         return JsonUtil.objectToJson(lstDto);
@@ -126,13 +126,14 @@ public class SaleRest extends AbstractRest<Sale> {
         List<Sale> lst = facade.listByIdClient(c.getIdClient());
         List<SaleDto> lstDto = new ArrayList<>();
 
-        HashMap<Integer, Long> mapPointsByIdClient = pointFacade.mapPointsByIdClient();
+        HashMap<Integer, Point> mapPointsByIdSale = pointFacade.mapPointsByIdSale();
 
         for (Sale s : lst) {
-            SaleDto dtop = facade.parse(s, mapPointsByIdClient);
+            SaleDto dtop = facade.parse(s, mapPointsByIdSale.get(s.getIdSale()));
             lstDto.add(dtop);
         }
+       
         return JsonUtil.objectToJson(lstDto);
     }
-    
+
 }

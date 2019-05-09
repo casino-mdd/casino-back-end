@@ -3,10 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/opt/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/ClientFacade.java</file>
-            <file>file:/opt/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/SaleFacade.java</file>
-            <file>file:/opt/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/dto/RewardDto.java</file>
-            <file>file:/opt/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/RewardFacade.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/presentation/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/dto/RewardDto.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/presentation/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/dto/ExchangeDto.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/presentation/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/RewardFacade.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/presentation/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/ExchangeFacade.java</file>
+            <file>file:/home/dagofonseca/Projects/University/mdd/presentation/casino-back-end/casino_mdd/casino_mdd-ejb/src/java/mdd/casino/jpa/entity/facade/UserAccountFacade.java</file>
         </group>
     </open-files>
 </project-private>

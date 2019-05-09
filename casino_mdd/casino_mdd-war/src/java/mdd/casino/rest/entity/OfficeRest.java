@@ -106,6 +106,6 @@ public class OfficeRest extends AbstractRest<Office> {
         obj.setUpdatedAt(new Date());
 
         return updateDefault(obj);
-    } 
+    }   
 
 }

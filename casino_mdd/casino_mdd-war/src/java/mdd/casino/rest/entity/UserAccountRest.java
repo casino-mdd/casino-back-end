@@ -1,4 +1,4 @@
-    /*
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -33,21 +33,21 @@ import mdd.casino.util.JsonUtil;
  */
 @Path("userAccount")
 public class UserAccountRest extends AbstractRest<UserAccount> {
-    
+
     @Context
     private UriInfo context;
-    
+
     UserAccountFacade facade = BeanUtil.lookupFacadeBean(UserAccountFacade.class);
-    
+
     public UserAccountRest() {
         super(UserAccount.class);
     }
-    
+
     @Override
     public UserAccountFacade getFacade() {
         return facade;
     }
-    
+
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
@@ -57,17 +57,36 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
         obj.setCreatedAt(new Date());
         obj.setUpdatedAt(new Date());
         obj.setPassword(HashUtil.md5(obj.getPassword()));
-        
+
         return createDefault(obj);
     }
-    
+
+    @POST
+    @Path("/createdto")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDto(String obj_json) {
+        UserAccountDto dto = JsonUtil.jsonToObject(obj_json, UserAccountDto.class);
+
+        StringBuilder err = new StringBuilder();
+        facade.createDto(dto, err);
+        String json;
+        if (!err.toString().isEmpty()) {
+            json = "{ \"error\": \"" + err.toString() + "\" }";
+        } else {
+            json = JsonUtil.objectToJson(dto);
+        }
+
+        return Response.status(200).entity(json).build();
+    }   
+
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public String list() {
         return listDefault();
     }
-    
+
     @GET
     @Path("listdto")
     @Produces(MediaType.APPLICATION_JSON)
@@ -75,45 +94,45 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
         List<UserAccount> lstOri = facade.findAll();
         List<UserAccountDto> lstDto = new ArrayList();
         for (UserAccount c : lstOri) {
-            UserAccountDto dto = facade.parseUserAccount(c);            
+            UserAccountDto dto = facade.parseUserAccount(c);
             lstDto.add(dto);
         }
         return JsonUtil.objectToJson(lstDto);
     }
-    
+
     @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") String id) {
         return findDefault(new Integer(id));
     }
-    
+
     @GET
     @Path("finddto/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public String findByUsername(@PathParam("username") String username) {
         UserAccount u = facade.findByUsername(username);
-        if(u==null){
+        if (u == null) {
             return "{\"username\":\"Usuario no encontrado\"}";
         }
         UserAccountDto dto = facade.parseUserAccount(u);
         return JsonUtil.objectToJson(dto);
     }
-    
+
     @PUT
     @Path("update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@PathParam("id") String id, String obj_json) {
         UserAccount obj = JsonUtil.jsonToObject(obj_json, UserAccount.class);
         UserAccount objOld = facade.find(new Integer(id));
-        
+
         obj.setIdUserAccount(objOld.getIdUserAccount());
         obj.setCreatedAt(objOld.getCreatedAt());
         obj.setUpdatedAt(new Date());
-        
+
         return updateDefault(obj);
     }
-    
+
     @POST
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
@@ -129,8 +148,8 @@ public class UserAccountRest extends AbstractRest<UserAccount> {
             //usLogin.getIdEmployee().setIdOffice(null);
             res = JsonUtil.objectToJson(usLogin);
         }
-        
+
         return Response.status(200).entity(res).build();
     }
-    
+
 }

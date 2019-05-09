@@ -95,6 +95,7 @@ public class ClientFacade extends AbstractFacade<Client> {
         }
 
         return c;
+
     }
     
     public ClientDto parseClient(Client c) {
@@ -110,7 +111,7 @@ public class ClientFacade extends AbstractFacade<Client> {
 
         return dto;
     }
-    
+
     public ClientPointDto parseClientPoint(Client c, List<Point> lstP, List<Reward> lstR) {
         ClientPointDto dto = new ClientPointDto();
         dto.setAge(c.getIdPerson().getAge());

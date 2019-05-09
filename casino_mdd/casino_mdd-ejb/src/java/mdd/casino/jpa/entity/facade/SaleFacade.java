@@ -6,7 +6,6 @@
 package mdd.casino.jpa.entity.facade;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -98,7 +97,7 @@ public class SaleFacade extends AbstractFacade<Sale> {
         return findList(hql);
     }
     
-    public SaleDto parse(Sale s, HashMap<Integer, Long> mapPointsByIdClient) {
+    public SaleDto parse(Sale s, Point p) {
         SaleDto dto = new SaleDto();
         dto.setClient(s.getIdClient().getIdPerson().getName() + " " + s.getIdClient().getIdPerson().getSurname());
         dto.setCost(s.getCost());
@@ -107,8 +106,11 @@ public class SaleFacade extends AbstractFacade<Sale> {
         dto.setIdenNumEmployee(s.getIdEmployee().getIdPerson().getIdentificationNumber());
         dto.setPaymentMethod(s.getPaymentMethod());
 
-        long points = (mapPointsByIdClient.get(s.getIdClient().getIdClient()) == null) ? 0 : mapPointsByIdClient.get(s.getIdClient().getIdClient());
-        dto.setPoints((int) points);
+        int points = 0;
+        if (p != null) {
+            points = p.getTotalPoints();
+        }
+        dto.setPoints(points);
 
         dto.setToken(s.getToken());
 

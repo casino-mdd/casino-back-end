@@ -33,70 +33,70 @@ import mdd.casino.util.JsonUtil;
  */
 @Path("exchange")
 public class ExchangeRest extends AbstractRest<Exchange> {
-
+    
     @Context
     private UriInfo context;
-
+    
     ExchangeFacade facade = BeanUtil.lookupFacadeBean(ExchangeFacade.class);
     ClientFacade clientFacade = BeanUtil.lookupFacadeBean(ClientFacade.class);
-
+    
     public ExchangeRest() {
         super(Exchange.class);
     }
-
+    
     @Override
     public ExchangeFacade getFacade() {
         return facade;
     }
-
+    
     @POST
     @Path("/exchangeReward")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(String obj_json) {
-
+        
         ExchangeDto dto = JsonUtil.jsonToObject(obj_json, ExchangeDto.class);
-
+        
         StringBuilder err = new StringBuilder();
         facade.exchangeReward(dto, err);
-
+        
         String result;
         if (!err.toString().isEmpty()) {
             result = "{\"error\":\"" + err.toString() + "\"}";
         } else {
             result = JsonUtil.objectToJson(dto);
         }
-
+        
         return Response.status(200).entity(result).build();
     }
-
+    
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
     public String list() {
         return listDefault();
     }
-
+    
     @GET
     @Path("find/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String find(@PathParam("id") String id) {
         return findDefault(new Integer(id));
     }
-
+    
     @PUT
     @Path("update/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String update(@PathParam("id") String id, String obj_json) {
         Exchange obj = JsonUtil.jsonToObject(obj_json, Exchange.class);
         Exchange objOld = facade.find(new Integer(id));
-
+        
         obj.setIdExchange(objOld.getIdExchange());
         obj.setCreatedAt(objOld.getCreatedAt());
-
+        
         return updateDefault(obj);
     }
-
+    
     @GET
     @Path("listdto")
     @Produces(MediaType.APPLICATION_JSON)
@@ -109,7 +109,7 @@ public class ExchangeRest extends AbstractRest<Exchange> {
         }
         return JsonUtil.objectToJson(lstDto);
     }
-
+    
     @GET
     @Path("finddto/{identificationNumClient}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -125,6 +125,6 @@ public class ExchangeRest extends AbstractRest<Exchange> {
             lstDto.add(dtop);
         }
         return JsonUtil.objectToJson(lstDto);
-    }
-
+    }    
+    
 }

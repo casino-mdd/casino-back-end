@@ -58,7 +58,7 @@ public class ClientRest extends AbstractRest<Client> {
     public ClientFacade getFacade() {
         return facade;
     }
-    
+
     @POST
     @Path("/create")
     @Produces(MediaType.APPLICATION_JSON)
