@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
+import mdd.casino.jpa.entity.dto.UserAccountDto;
 import mdd.casino.jpa.entity.pojo.UserAccount;
 
 @Stateless
@@ -50,6 +51,22 @@ public class UserAccountFacade extends AbstractFacade<UserAccount> {
         }
 
         return u;
+    }
+    
+    public UserAccountDto parseUserAccount(UserAccount u){
+        
+        String status = (u.getIsActive()) ? "Activo" : "Inactivo";
+        UserAccountDto dto = new UserAccountDto();
+        
+        dto.setCreatedAt(u.getCreatedAt());
+        dto.setUsername(u.getUsername());
+        dto.setIdUserAccount(u.getIdUserAccount());
+        dto.setPassword(u.getPassword());
+        dto.setPosition(u.getIdEmployee().getPosition());
+        dto.setUpdatedAt(u.getUpdatedAt());        
+        dto.setStatus(status);
+               
+        return dto;
     }
 
 }
